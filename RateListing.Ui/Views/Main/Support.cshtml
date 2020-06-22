@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "Yardım";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<header class="header_in is_sticky menu_fixed">@Html.Partial("Menu/Other")</header>
+
+<div class="sub_header_in sticky_header">
+    <div class="container">
+        <h1>Yardım ve İstek</h1>
+    </div>
+</div>
+<main>
+    <div class="container margin_60_35">
+        <div class="row justify-content-center">
+
+            <div class="col-xl-5 col-lg-6 pr-xl-5">
+                <div class="main_title_3">
+                    <span></span>
+                    <h2>Bize Mesaj Gönder</h2>
+                    @*<p>Cum doctus civibus efficiantur in imperdiet.</p>*@
+                </div>
+                <div id="message-contact"></div>
+                <form method="post" action="/Main/Support" id="contactform" autocomplete="off">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Ad</label>
+                                <input class="form-control" type="text" id="name_contact" name="name_contact" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Soyad</label>
+                                <input class="form-control" type="text" id="lastname_contact" name="lastname_contact" required>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /row -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input class="form-control" type="email" id="email_contact" name="email_contact" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Telefon</label>
+                                <input class="form-control" type="text" id="phone_contact" name="phone_contact" pattern="[0-9]{10}" title="10 Haneli ve Boşluksuz Olacak Şekilde Giriniz." required>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /row -->
+                    <div class="form-group">
+                        <label>Mesaj</label>
+                        <textarea class="form-control" id="message_contact" name="message_contact" style="height:150px;" pattern="[0-9]{10}" title="10 Haneli ve Boşluksuz Olacak Şekilde Giriniz." required></textarea>
+                    </div>
+                    <p class="add_top_30"><input type="submit" value="Gönder" class="btn_1 rounded" id="submit-contact"></p>
+                </form>
+            </div>
+            <div class="col-xl-5 col-lg-6 pl-xl-5">
+                <div class="box_contacts">
+                    <i class="ti-support"></i>
+                    <h2>Yardıma mı ihtiyacınız var?</h2>
+                    <a href="tel:02127060147">+90 212 706 0147</a> - <a href="mailto:info@ratelisting.com">info@ratelisting.com</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /container -->
+</main>
+

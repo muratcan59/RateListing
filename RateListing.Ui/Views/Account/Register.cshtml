@@ -1,0 +1,176 @@
+﻿@using RateListing.Ui.Models
+@model RegisterViewModel
+
+@{
+    ViewBag.Title = "Hızlı Akreditasyon Formu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var kategoriler = RateListing.Bll.bCategory.GetAll();
+}
+
+<header class="header_in is_sticky menu_fixed">@Html.Partial("Menu/Other")</header>
+
+
+<div class="sub_header_in sticky_header">
+    <div class="container">
+        <h1>Hızlı Akreditasyon Formu</h1>
+    </div>
+    <!-- /container -->
+</div>
+<!-- /sub_header -->
+
+<main>
+    <div class="container margin_60">
+        <div class="row justify-content-center">
+            <div class="col-xl-6 col-lg-6 col-md-8">
+                <div class="box_account">
+                    <h3 class="new_client">Akredite Ol</h3> <small class="float-right pt-2">*Zorunlu Alan</small>
+                    <div class="form_container">
+                        <form action="/Account/Register" class="form-horizontal" method="post" role="form" autocomplete="off">
+                            @Html.ValidationSummary("", new { @class = "text-danger text-center" })
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email*", required = "true" })
+                            </div>
+                            <div class="form-group">
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", id = "password1", placeholder = "Şifre*", required = "true" })
+                            </div>
+                            <div class="form-group">
+                                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", id = "password2", placeholder = "Şifrey Tekrar*", required = "true" })
+                            </div>
+                            <hr>
+                            @*<div class="form-group">
+                                    <label class="container_radio" style="display: inline-block; margin-right: 15px;">
+                                        Şahıs
+                                        <input type="radio" name="client_type" checked value="private">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container_radio" style="display: inline-block;">
+                                        Kurumsal
+                                        <input type="radio" name="client_type" value="company">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>*@
+                            <div class="private box">
+                                <div class="row no-gutters">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Firma Adı", required = "true" })
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            @Html.DropDownListFor(m => m.CategoryId, new SelectList(kategoriler, "Id", "Name"), "Sektör Seçiniz*", htmlAttributes: new { @class = "form-control", placeholder = "Sektör", required = "true" })
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control", placeholder = "Telefon*", required = "true", pattern = "[0-9]{10}", title = "10 Haneli ve Boşluksuz Olacak Şekilde Giriniz." })
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /row -->
+                                @*<div class="row no-gutters">
+                                        <div class="col-6 pr-1">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="City*">
+                                            </div>
+                                        </div>
+                                        <div class="col-6 pl-1">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Postal Code*">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div class="custom-select-form">
+                                                    <select class="wide add_bottom_10" name="country" id="country">
+                                                        <option value="" selected>Country*</option>
+                                                        <option value="Europe">Europe</option>
+                                                        <option value="United states">United states</option>
+                                                        <option value="Asia">Asia</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                <!-- /row -->
+                                @*<div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Telephone *">
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                <!-- /row -->
+                            </div>
+                            <!-- /privato -->
+                            @*<div class="company box" style="display: none;">
+                                    <div class="row no-gutters">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Company Name*">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Full Address">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /row -->
+                                    <div class="row no-gutters">
+                                        <div class="col-6 pr-1">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="City*">
+                                            </div>
+                                        </div>
+                                        <div class="col-6 pl-1">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Postal Code*">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div class="custom-select-form">
+                                                    <select class="wide add_bottom_10" name="country" id="country">
+                                                        <option value="" selected>Country*</option>
+                                                        <option value="Europe">Europe</option>
+                                                        <option value="United states">United states</option>
+                                                        <option value="Asia">Asia</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /row -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Telephone *">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /row -->
+                                </div>*@
+                            <!-- /azienda -->
+                            <hr>
+                            <div class="form-group">
+                                <label class="container_check">
+                                    <a target="_blank" href="/kvkk">KVKK</a> metnini okudum ve onaylıyorum.
+                                    <input type="checkbox" required>
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="text-center"><input type="submit" value="Akredite Ol" class="btn_1 full-width"></div>
+                            <div class="text-center mt-3"><a class="text-center" href="/Account/Login">Zaten Üyeyim</a></div>
+                        </form>
+                    </div>
+                    <!-- /form_container -->
+                </div>
+                <!-- /box_account -->
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</main>
+<!--/main-->

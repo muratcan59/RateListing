@@ -1,0 +1,127 @@
+﻿@using RateListing.Ui.Models.Helper
+@{
+    bool isMobileApp = false;
+    if (RateListing.Ui.Models.Helper.Cookie.Get("isMobileApp") != null && RateListing.Ui.Models.Helper.Cookie.Get("isMobileApp") == "true")
+    {
+        isMobileApp = true;
+    }
+}
+<style>
+
+    @@media (max-width: 991px) {
+
+        .logo_sticky2 {
+            margin-top: -10px !important;
+        }
+
+        #top_menu {
+            top: 85px;
+        }
+    }
+
+    @@media (min-width: 991px) {
+
+        .mobile-menu {
+            padding-top: 25px;
+        }
+    }
+
+    .hamburger {
+        position: absolute;
+        top: 15px;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3 col-12">
+            <div id="logo" style="background-color:white;">
+                <a href="/">
+                    <img src="~/sparker/html/img/logo.png" height="100" alt="" class="logo_sticky logo_sticky2 mt-0">
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-9 col-12 mobile-menu">
+            <ul id="top_menu" style="@(isMobileApp ? "display:none;":"")">
+                @if (User.Identity.IsAuthenticated)
+                {
+
+                    /* Desktop */
+                    <li class="btn-desktop"><a href="/Company/Dashboard/UserProfile/" class="btn_add">Profilim</a></li>
+                    <li class="btn-desktop"><a href="/cikis-yap" class="btn" style="font-size:0.875rem; font-weight:500;">Çıkış Yap</a></li>
+
+                    /* Mobile */
+                    <li class="btn-mobile"><a href="/Company/Dashboard/UserProfile/" class="btn_add"><i class="icon-user"></i></a></li>
+                    <li class="btn-mobile"><a href="/cikis-yap" class="btn"><i class="icon-logout-1"></i></a></li>
+
+                    <li style="margin-left:0px;">
+                        <span class="btn" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="icon-share"></i>
+                        </span>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item text-dark" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=@Request.Url.Host"><i class="ti-facebook"></i> Facebook'da Paylaş</a>
+                            <a class="dropdown-item text-dark" target="_blank" href="https://twitter.com/share?url=@Request.Url.Host&text=RateListing"><i class="ti-twitter"></i> Twitter'da Paylaş</a>
+                        </div>
+                    </li>
+                }
+                else
+                {
+                    /* Desktop */
+                    <li class="btn-desktop"><a href="/Account/Register" class="btn_add">Akredite Ol</a></li>
+                    <li class="btn-desktop"><a href="/Account/Login" class="btn" style="font-size:0.875rem; font-weight:500;">Giriş Yap</a></li>
+
+                    /* Mobile */
+                    <li class="btn-mobile"><a href="/Account/Register" class="btn_add"><i class="icon-user-add"></i></a></li>
+                    <li class="btn-mobile"><a href="/Account/Login" class="btn"><i class="icon-login"></i></a></li>
+
+                    <li style="margin-left:0px;">
+                        <span class="btn" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="icon-share"></i>
+                        </span>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item text-dark" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=@Request.Url.Host"><i class="ti-facebook"></i> Facebook'da Paylaş</a>
+                            <a class="dropdown-item text-dark" target="_blank" href="https://twitter.com/share?url=@Request.Url.Host&text=RateListing"><i class="ti-twitter"></i> Twitter'da Paylaş</a>
+                        </div>
+                    </li>
+                }
+            </ul>
+            <!-- /top_menu -->
+            <a href="#menu" class="btn_mobile">
+                <div class="hamburger hamburger--spin" id="hamburger">
+                    <div class="hamburger-box">
+                        <div class="hamburger-inner"></div>
+                    </div>
+                </div>
+            </a>
+            @if (isMobileApp)
+            {
+                <a class="btn_mobile" style="margin-top:30px;margin-bottom:-60px;float:right;" href="javascript:void(0);" onclick="window.history.go(-1);">
+                    <h5>Geri</h5>
+                </a>
+            }
+            <nav id="menu" class="main-menu" style="top:10px; right:80px; float:left;">
+                <ul>
+                    <li><span><a href="/">Anasayfa</a></span></li>
+                    <li style="@(isMobileApp ? "display:none;":"")"><span><a href="/platform">Platform</a></span></li>
+                    @*<li><span><a href="/haber-etkinlik">Haberler ve Etkinlikler</a></span></li>*@
+                    @*<li><span><a href="/sss">SSS</a></span></li>*@
+                    <li class="notranslate">
+                        @if (LangHelper.GetLang() == LangType.tr)
+                        {
+                            <span><a href="javascript:void(0)"><img style="margin-right:3px;" src="~/sparker/html/img/turkey-flag-icon-32.png" /> Türkçe</a></span>
+                        }
+                        else
+                        {
+                            <span><a href="javascript:void(0)"><img style="margin-right:3px;" src="~/sparker/html/img/united-states-of-america-flag-icon-32.png" />English</a></span>
+                        }
+                        <ul>
+                            <li><a href="/changeLang?lang=@LangType.tr&returnUrl=@Request.Url"><img style="margin-right:3px;" src="~/sparker/html/img/turkey-flag-icon-16.png" />Türkçe</a></li>
+                            <li><a href="/changeLang?lang=@LangType.en&returnUrl=@Request.Url"><img style="margin-right:3px;" src="~/sparker/html/img/united-states-of-america-flag-icon-16.png" />English</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <!-- /row -->
+</div>

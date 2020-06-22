@@ -1,0 +1,33 @@
+﻿@model RateListing.Model.Complaint
+
+@{
+    ViewBag.Title = "Şikayet Detayı";
+    Layout = "~/Areas/Company/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Anasayfa</a>
+        </li>
+        <li class="breadcrumb-item active">Şikayet Detayı</li>
+    </ol>
+    <div class="box_general">
+        <div class="header_box">
+            <h2 class="d-inline-block">Şikayet Detayı</h2>
+        </div>
+        <div class="row pb-5">
+            <div class="col-2"><strong>Ad Soyad</strong></div><div class="col-10">@Model.NameSurname</div>
+            <div class="col-2"><strong>Email</strong></div><div class="col-10">@Model.Email</div>
+            <div class="col-2"><strong>Telefon</strong></div><div class="col-10">@Model.Phone</div>
+            <div class="col-2"><strong>Puan</strong></div><div class="col-10">@Model.Score</div>
+            <div class="col-2"><strong>Onay Durumu</strong></div><div class="col-10">@(Model.IsApprove ? Html.Raw("<a class='text-success'>Onaylandı</a>") : Html.Raw("<a class='text-danger'>Onaylanmadı</a>"))</div>
+            <div class="col-2"><strong>Çözüm Durumu</strong></div><div class="col-10">@(Model.IsSolve ? Html.Raw("<a class='text-success'>Çözüldü</a>") : Html.Raw("<a class='text-danger'>Çözülmedi</a>"))</div>
+            <div class="col-2"><strong>Tarih</strong></div><div class="col-10">@Model.CreateDate</div>
+            <div class="col-2"><strong>Mesaj</strong></div><div class="col-10">@Model.Answer</div>
+
+            <a class="btn btn-warning mt-5 mr-3" href="/Company/Dashboard/ComplaintList">Listeye Dön</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,292 @@
+﻿@using RateListing.Ui.Models.Helper
+
+@{
+    var lang = LangHelper.GetLang();
+}
+<!DOCTYPE html>
+<html lang="@lang.GetLangString()">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Rate Listing şirketlerin tanınan, güvenilir ayrıca sektörlerinin rol modelleri olarak Türkiye ve dünya piyasalarınının tam ortasında yer almaları olanak sağlayan bir platformdur.">
+    <meta name="author" content="Setup34">
+    <title>@ViewBag.Title | Rate Listing</title>
+
+    @* Facebook Paylaşım Meta Tagları *@
+    @*<meta property="og:type" content="website" />
+        <meta property="og:site_name" content="SITE_ISIM">
+        <meta property="og:title" content="BASLIK" /> <!-- paylasim sayfa baslik -->
+        <meta property="og:description" content="ACIKLAMA" /> <!-- paylasim aciklama -->
+        <meta property="og:url" content="SAYFA_URL_ADRESI" /> <!-- paylasim sayfa url -->
+        <meta property="og:locale" content="tr-TR">
+        <meta property="og:image" content="RESIM_YOLU"> <!-- paylasim resim -->*@
+    @* Twitter Paylaşım Meta Tagları *@
+    @*<meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="SITE_ISIM">
+        <meta name="twitter:title" content="BASLIK">
+        <meta name="twitter:url" content="SAYFA_URL_ADRESI">
+        <meta name="twitter:description" content="ACIKLAMA">
+        <meta name="twitter:image" content="RESIM_YOLU">*@
+
+    <!-- Favicons-->
+    <link rel="shortcut icon" href="~/sparker/html/img/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" type="image/x-icon" href="~/sparker/html/img/apple-touch-icon-57x57-precomposed.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="~/sparker/html/img/apple-touch-icon-72x72-precomposed.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="~/sparker/html/img/apple-touch-icon-114x114-precomposed.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="~/sparker/html/img/apple-touch-icon-144x144-precomposed.png">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" rel="stylesheet" />
+    <!-- GOOGLE WEB FONT -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+
+    <!-- BASE CSS -->
+    <link href="~/sparker/html/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/sparker/html/css/style.css" rel="stylesheet">
+    <link href="~/sparker/html/css/vendors.css" rel="stylesheet">
+
+    <!-- YOUR CUSTOM CSS -->
+    <link href="~/sparker/html/css/custom.css" rel="stylesheet">
+
+    <!-- SPECIFIC CSS -->
+    <link href="~/sparker/html/css/blog.css" rel="stylesheet">
+
+    <!-- Modernizr -->
+    <script src="~/sparker/html/js/modernizr.js"></script>
+    <link href="~/sparker/html/css/owl.carousel.min.css" rel="stylesheet" />
+    <link href="~/sparker/html/css/owl.theme.default.min.css" rel="stylesheet" />
+
+    <style>
+        #google_translate_element {
+            width: 300px;
+            float: right;
+            text-align: right;
+            display: block
+        }
+
+        .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+
+        body {
+            top: 0px !important;
+        }
+
+        #goog-gt-tt {
+            display: none !important;
+            top: 0px !important;
+        }
+
+        .goog-tooltip skiptranslate {
+            display: none !important;
+            top: 0px !important;
+        }
+
+        .activity-root {
+            display: hide !important;
+        }
+
+        .status-message {
+            display: hide !important;
+        }
+
+        .started-activity-container {
+            display: hide !important;
+        }
+
+        .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+
+        .goog-text-highlight {
+            background-color: unset !important;
+            box-shadow: unset !important;
+        }
+
+        body {
+            top: 0px !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="page">
+        @RenderBody()
+        <!-- /main -->
+        @Html.Partial("Footer")
+    </div>
+    <!-- page -->
+    <!-- Sign In Popup -->
+    <div id="sign-in-dialog" class="zoom-anim-dialog mfp-hide">
+        <div class="small-dialog-header">
+            <h3>Giriş Yap</h3>
+        </div>
+        @using (Html.BeginForm("", "giris-yap", new { ReturnUrl = "/company" }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            <div class="sign-in-wrapper">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="form-control" name="Email" id="email">
+                    <i class="icon_mail_alt"></i>
+                </div>
+                <div class="form-group">
+                    <label>Şifre</label>
+                    <input type="password" class="form-control" name="Password" id="password" value="">
+                    <i class="icon_lock_alt"></i>
+                </div>
+                <div class="clearfix add_bottom_15">
+                    <div class="checkboxes float-left">
+                        <label class="container_check">
+                            Beni Hatırla
+                            <input type="checkbox" name="RememberMe">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="float-right mt-1"><a id="forgot" href="javascript:void(0);">Şifremi Unuttum</a></div>
+                </div>
+                <div class="text-center"><input type="submit" value="Giriş Yap" class="btn_1 full-width"></div>
+                <div class="text-center">
+                    Hesabın yoksa     <a href="/kayit-ol">Kayıt Ol</a>
+                </div>
+                <div id="forgot_pw">
+                    <div class="form-group">
+                        <label>Please confirm login email below</label>
+                        <input type="email" class="form-control" name="email_forgot" id="email_forgot">
+                        <i class="icon_mail_alt"></i>
+                    </div>
+                    <p>You will receive an email containing a link allowing you to reset your password to a new preferred one.</p>
+                    <div class="text-center"><input type="submit" value="Reset Password" class="btn_1"></div>
+                </div>
+            </div>
+        }
+        <!--form -->
+    </div>
+
+    <!-- /Sign In Popup -->
+
+    <div id="toTop"></div><!-- Back to top button -->
+    <!-- COMMON SCRIPTS -->
+    <script src="~/sparker/html/js/common_scripts.js"></script>
+    <script src="~/sparker/html/js/functions.js"></script>
+    <script src="~/sparker/html/assets/validate.js"></script>
+    <script src="~/sparker/html/js/bootstrap.min.js"></script>
+    <script src="~/sparker/html/js/owl.carousel.min.js"></script>
+    <script src="~/sparker/html/js/owl.autoplay.js"></script>
+    <script src="~/sparker/html/js/owl.autorefresh.js"></script>
+    <script src="~/sparker/html/js/jquery.mousewheel.min.js"></script>
+    <script src="~/sparker/html/js/highlight.js"></script>
+    <script src="~/sparker/html/js/app.js"></script>
+    <script src="~/sparker/html/js/super-stars.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+
+    <script type="text/javascript">
+
+        @if (lang==LangType.tr)
+        {
+        <text>
+        Cookies.remove('googtrans', { domain: 'ratelisting.com' });
+        Cookies.remove('googtrans', { domain: '.ratelisting.com' });
+        </text>
+        }
+                function googleTranslateElementInit() {
+                    new google.translate.TranslateElement({ pageLanguage: 'tr' }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        $(document).ready(function () {
+            var owl = $('.owl-carousel');
+            owl.owlCarousel({
+                loop: true,
+                nav: false,
+                navSpeed: 2000,
+                slideSpeed: 2000,
+                dots: false,
+                dotsSpeed: 2000,
+                lazyLoad: false,
+                autoplay: true,
+                autoplayHoverPause: true,
+                autoplayTimeout: 5000,
+                autoplaySpeed: 800,
+                margin: 0,
+                stagePadding: 0,
+                freeDrag: false,
+                mouseDrag: true,
+                touchDrag: true,
+                slideBy: 1,
+                fallbackEasing: "linear",
+                responsiveClass: true,
+                navText: ["previous", "next"],
+                responsive: {
+                    0: {
+                        items: 1,
+                        nav: false
+                    },
+                    600: {
+                        items: 2,
+                        nav: false
+                    },
+                    1000: {
+                        items: 3,
+                        nav: false,
+                        margin: 20
+                    }
+                }
+            });
+            owl.on('mouseenter', '.owl-stage', function (e) {
+                if (e.deltaY > 0) {
+                    owl.trigger('prev.owl');
+                } else {
+                    owl.trigger('next.owl');
+                }
+                e.preventDefault();
+            });
+        })
+    </script>
+    <script>
+        $("#CityNum").change(function () {
+            var cityId = $("#CityNum").val();
+            $("#DistrictNum").html("<option value>@(lang==LangType.tr?"İlçe Seçin":"Choose District")</option>");
+            $.get("/Main/Districts?cityNum=" + cityId, function (result) {
+                $.each(result, function (key, value) {
+                    $("#DistrictNum").append("<option value='" + value.DistrictNum + "'>" + value.Name + "</option>");
+                });
+            });
+        });
+
+    </script>
+
+    <!-- SPECIFIC SCRIPTS -->
+    <script>
+        $('#yorumButon').click(function () {
+
+            $('#yorum-dialog').modal("show");
+            $("#yorum-dialog").appendTo("body");
+        });
+    </script>
+    <script>
+        $('#sikayetButon').click(function () {
+
+            $('#sikayet-dialog').modal("show");
+            $("#sikayet-dialog").appendTo("body");
+        });
+    </script>
+    <script>
+        $('#teklifButon').click(function () {
+
+            $('#teklif-dialog').modal("show");
+            $("#teklif-dialog").appendTo("body");
+        });
+    </script>
+    <script>
+        $('#referansButon').click(function () {
+
+            $('#referans-dialog').modal("show");
+            $("#referans-dialog").appendTo("body");
+        });
+    </script>
+
+
+</body>
+</html>

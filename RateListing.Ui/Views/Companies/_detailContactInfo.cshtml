@@ -1,0 +1,85 @@
+﻿@model User
+@using RateListing.Model
+@using RateListing.Bll.Helpers
+
+@{
+    var ortalama = RateListing.Bll.bComment.ScoreAvg(Model.Id);
+
+    var firmail = new RateListing.Model.City();
+    if (Model.CityNum != null)
+    {
+        firmail = RateListing.Bll.bCity.GetById(Model.CityNum.Value);
+    }
+    var firmailce = new RateListing.Model.District();
+    if (Model.DistrictNum != null)
+    {
+        firmailce = RateListing.Bll.bDistrict.GetById(Model.DistrictNum.Value);
+    }
+}
+
+
+
+<div class="box_detail booking">
+    <div class="price">
+        <div class="score"><label>Kurumsal Rating </label><br /><strong class="float-right">@RateListing.Bll.bUser.GetCorporateScore(Model.Id)</strong></div>
+        <label style="margin-top:0px;">Müşteri Ratingi</label>
+        <br /><br />
+        @Html.Partial("_stars", ortalama)
+        <br />
+    </div>
+
+    <div class="form-group">
+        @if (!string.IsNullOrEmpty(Model.AuthorizedPerson))
+        {
+            <label><b>Yetkili Kişi:</b> &nbsp;&nbsp;@Model.AuthorizedPerson</label>
+        }
+    </div>
+    <div class="form-group">
+        @if (!string.IsNullOrEmpty(Model.Email))
+        {
+            <label><b>E-Mail:</b>&nbsp;&nbsp;@Model.Email</label>
+        }
+    </div>
+    <div class="form-group">
+        @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+        {
+            <label><b>Telefon:</b> &nbsp;&nbsp;@Model.PhoneNumber</label>
+        }
+    </div>
+    <div class="form-group">
+        @if (!string.IsNullOrEmpty(Model.AlternativePhone))
+        {
+            <label><b>Alternatif Telefon:</b> &nbsp;&nbsp;@Model.AlternativePhone</label>
+        }
+    </div>
+    <div class="form-group">
+        @if (!string.IsNullOrEmpty(Model.WebUrl))
+        {
+            <label><b>Web Adresi:</b>&nbsp;&nbsp;@Model.WebUrl</label>
+        }
+    </div>
+
+    <div class="form-group">
+        @if (!string.IsNullOrEmpty(Model.Address))
+        {
+            <label><b>Adres:</b>&nbsp;&nbsp;@Model.Address</label>
+        }
+    </div>
+
+    <div class="form-group">
+        @if (!string.IsNullOrEmpty(firmail.Name))
+        {
+            <label style="margin-right:10px"><b>İl: </b>&nbsp;&nbsp;@firmail.Name</label><label><b>İlçe:</b> &nbsp;&nbsp;@firmailce.Name</label>
+        }
+    </div>
+    <button type="button" id="teklifButon" class=" add_top_30 btn_1 full-width purchase">Fiyat Teklifi Al</button>
+    @*<button type="button" id="yorumButon" class=" add_top_30 btn_1 full-width purchase">Yorum Yap</button>*@
+    <button type="button" id="sikayetButon" class=" add_top_30 btn_1 full-width purchase">Şikayet Et</button>
+    <button type="button" id="referansButon" class=" add_top_30 btn_1 full-width purchase">Referans Ver</button>
+    <div class="text-center"><small>@*No money charged in this step*@</small></div>
+</div>
+<ul class="share-buttons">
+    <li><a class="fb-share" href="@Model.FacebookUrl"><i class="social_facebook"></i> Facebook</a></li>
+    <li><a class="twitter-share" href="@Model.TwitterUrl"><i class="social_twitter"></i>Twitter </a></li>
+    <li><a class="gplus-share" href="@Model.InstagramUrl"><i class="social_instagram"></i> Instagram</a></li>
+</ul>

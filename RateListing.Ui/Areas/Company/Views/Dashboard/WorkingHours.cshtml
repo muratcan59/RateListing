@@ -1,0 +1,247 @@
+﻿@using RateListing.Model
+@model List<Time>
+
+@{
+    ViewBag.Title = "Çalışma Saatleri";
+    Layout = "~/Areas/Company/Views/Shared/_UserLayout.cshtml";
+    var userID = (string)ViewBag.UserId;
+    var staticTimeList = RateListing.Bll.Helpers.Tool.getStaticTimeList();
+
+    var Pazartesi = Model.FirstOrDefault(w => w.Day == Enums.Gunler.Pazartesi);
+    var PazartesiOpenValue = Pazartesi != null ? Pazartesi.OpenTime : null;
+    var PazartesiCloseValue = Pazartesi != null ? Pazartesi.CloseTime : null;
+
+    var Salı = Model.FirstOrDefault(w => w.Day == Enums.Gunler.Salı);
+    var SalıOpenValue = Salı != null ? Salı.OpenTime : null;
+    var SalıCloseValue = Salı != null ? Salı.CloseTime : null;
+
+    var Çarşamba = Model.FirstOrDefault(w => w.Day == Enums.Gunler.Çarşamba);
+    var ÇarşambaOpenValue = Çarşamba != null ? Çarşamba.OpenTime : null;
+    var ÇarşambaCloseValue = Çarşamba != null ? Çarşamba.CloseTime : null;
+
+    var Perşembe = Model.FirstOrDefault(w => w.Day == Enums.Gunler.Perşembe);
+    var PerşembeOpenValue = Perşembe != null ? Perşembe.OpenTime : null;
+    var PerşembeCloseValue = Perşembe != null ? Perşembe.CloseTime : null;
+
+    var Cuma = Model.FirstOrDefault(w => w.Day == Enums.Gunler.Cuma);
+    var CumaOpenValue = Cuma != null ? Cuma.OpenTime : null;
+    var CumaCloseValue = Cuma != null ? Cuma.CloseTime : null;
+
+    var Cumartesi = Model.FirstOrDefault(w => w.Day == Enums.Gunler.Cumartesi);
+    var CumartesiOpenValue = Cumartesi != null ? Cumartesi.OpenTime : null;
+    var CumartesiCloseValue = Cumartesi != null ? Cumartesi.CloseTime : null;
+
+    var Pazar = Model.FirstOrDefault(w => w.Day == Enums.Gunler.Pazar);
+    var PazarOpenValue = Pazar != null ? Pazar.OpenTime : null;
+    var PazarCloseValue = Pazar != null ? Pazar.CloseTime : null;
+
+}
+
+<link href="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+
+<div class="container-fluid">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Anasayfa</a>
+        </li>
+        <li class="breadcrumb-item active">Çalışma Saatleri</li>
+    </ol>
+    <div class="box_general padding_bottom">
+        <div class="header_box version_2">
+            <h2><i class="fa fa-clock-o"></i>Çalışma Saatleri</h2>
+        </div>
+        @using (Html.BeginForm("WorkingHours", "Dashboard", FormMethod.Post, new { enctype = "multipart/form-data", id = "WorkingHoursForm" }))
+        {
+            @Html.Hidden("userId", userID)
+
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">Pazartesi</label>
+                    @Html.Hidden("[0].UserId", userID)
+                    @Html.Hidden("[0].Day", RateListing.Model.Enums.Gunler.Pazartesi)
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("[0].OpenTime", new SelectList(staticTimeList, "Value", "Text", PazartesiOpenValue), "Açılış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("[0].CloseTime", new SelectList(staticTimeList, "Value", "Text", PazartesiCloseValue), "Kapanış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">Salı</label>
+                    @Html.Hidden("[1].UserId", userID)
+                    @Html.Hidden("[1].Day", RateListing.Model.Enums.Gunler.Salı)
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("[1].OpenTime", new SelectList(staticTimeList, "Value", "Text", SalıOpenValue), "Açılış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("[1].CloseTime", new SelectList(staticTimeList, "Value", "Text", SalıCloseValue), "Kapanış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">Çarşamba</label>
+                    @Html.Hidden("[2].UserId", userID)
+                    @Html.Hidden("[2].Day", RateListing.Model.Enums.Gunler.Çarşamba)
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("[2].OpenTime", new SelectList(staticTimeList, "Value", "Text", ÇarşambaOpenValue), "Açılış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("[2].CloseTime", new SelectList(staticTimeList, "Value", "Text", ÇarşambaCloseValue), "Kapanış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">Perşembe</label>
+                    @Html.Hidden("[3].UserId", userID)
+                    @Html.Hidden("[3].Day", RateListing.Model.Enums.Gunler.Perşembe)
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("[3].OpenTime", new SelectList(staticTimeList, "Value", "Text", PerşembeOpenValue), "Açılış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("[3].CloseTime", new SelectList(staticTimeList, "Value", "Text", PerşembeCloseValue), "Kapanış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">Cuma</label>
+                    @Html.Hidden("[4].UserId", userID)
+                    @Html.Hidden("[4].Day", RateListing.Model.Enums.Gunler.Cuma)
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("[4].OpenTime", new SelectList(staticTimeList, "Value", "Text", CumaOpenValue), "Açılış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("[4].CloseTime", new SelectList(staticTimeList, "Value", "Text", CumaCloseValue), "Kapanış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">Cumartesi</label>
+                    @Html.Hidden("[5].UserId", userID)
+                    @Html.Hidden("[5].Day", RateListing.Model.Enums.Gunler.Cumartesi)
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("[5].OpenTime", new SelectList(staticTimeList, "Value", "Text", CumartesiOpenValue), "Açılış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("[5].CloseTime", new SelectList(staticTimeList, "Value", "Text", CumartesiCloseValue), "Kapanış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">Pazar</label>
+                    @Html.Hidden("[6].UserId", userID)
+                    @Html.Hidden("[6].Day", RateListing.Model.Enums.Gunler.Pazar)
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("[6].OpenTime", new SelectList(staticTimeList, "Value", "Text", PazarOpenValue), "Açılış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("[6].CloseTime", new SelectList(staticTimeList, "Value", "Text", PazarCloseValue), "Kapanış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p><button type="submit" class="btn_1 medium mt-5">Kaydet</button></p>
+        }
+    </div>
+</div>
+
+<script src="~/sparker/html/coming_soon/js/jquery-2.2.4.min.js"></script>
+<script src="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+
+<script>
+    $('#WorkingHoursForm').on('submit', function (e) {
+        e.preventDefault();
+        var form = $('#WorkingHoursForm')[0];
+        var data = new FormData(form);
+        $.ajax({
+            url: '/Company/Dashboard/WorkingHours',
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (result) {
+                if (result.isSuccess) {
+                    Swal.fire(
+                        'Çalışma Saatleri',
+                        result.message,
+                        'success'
+                    )
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 2000);
+                }
+                else {
+                    Swal.fire(
+                        'Çalışma Saatleri',
+                        result.message,
+                        'danger'
+                    )
+                }
+            }
+        })
+    });
+</script>

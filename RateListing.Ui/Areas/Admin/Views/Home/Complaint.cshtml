@@ -1,0 +1,72 @@
+﻿@model RateListing.Model.Complaint
+
+@{
+    ViewBag.Title = "Şikayet Görüntüle";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var firma = RateListing.Bll.bUser.GetById(Model.UserId);
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Şikayet Detayı</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/Admin/Home/Index">Anasayfa</a></li>
+                        <li class="breadcrumb-item active">Şikayet Detayı</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Şikayet Detayı</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row pb-5">
+                            <div class="col-2"><strong>Firma Adı</strong></div><div class="col-10">@firma.Name</div>
+                            <div class="col-2"><strong>Firma Email</strong></div><div class="col-10">@firma.Email</div>
+                            <div class="col-2"><strong>Firma Telefon</strong></div><div class="col-10">@firma.PhoneNumber</div>
+                            <br /><br />
+                            <div class="col-2"><strong>Ad Soyad</strong></div><div class="col-10">@Model.NameSurname</div>
+                            <div class="col-2"><strong>Email</strong></div><div class="col-10">@Model.Email</div>
+                            <div class="col-2"><strong>Telefon</strong></div><div class="col-10">@Model.Phone</div>
+                            <div class="col-2"><strong>Puan</strong></div><div class="col-10">@Model.Score</div>
+                            <div class="col-2"><strong>Onay Durumu</strong></div><div class="col-10">@(Model.IsApprove ? Html.Raw("<a class='text-success'>Onaylandı</a>") : Html.Raw("<a class='text-danger'>Onaylanmadı</a>"))</div>
+                            <div class="col-2"><strong>Çözüm Durumu</strong></div><div class="col-10">@(Model.IsSolve ? Html.Raw("<a class='text-success'>Çözüldü</a>") : Html.Raw("<a class='text-danger'>Çözülmedi</a>"))</div>
+                            <div class="col-2"><strong>Tarih</strong></div><div class="col-10">@Model.CreateDate</div>
+                            <div class="col-2"><strong>Mesaj</strong></div><div class="col-10">@Model.Answer</div>
+
+                            <a class="btn btn-warning mt-5 mr-3" href="/Admin/Home/Complaints">Listeye Dön</a>
+                            @if (Model.IsSolve)
+                            {
+                                <a class="btn btn-danger mt-5 mr-3" href="/Admin/Home/ComplaintUpdate?complaintId=@Model.Id&isSolve=false">Çözülmedi Olarak Güncelle</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-success mt-5 mr-3" href="/Admin/Home/ComplaintUpdate?complaintId=@Model.Id&isSolve=true">Çözüldü Olarak Güncelle</a>
+                            }
+
+                            @if (Model.IsApprove)
+                            {
+                                <a class="btn btn-danger mt-5 mr-3" href="/Admin/Home/ComplaintUpdate?complaintId=@Model.Id&isApprove=false">Onaylanmadı Olarak Güncelle</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-success mt-5 mr-3" href="/Admin/Home/ComplaintUpdate?complaintId=@Model.Id&isApprove=true">Onaylandı Olarak Güncelle</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+

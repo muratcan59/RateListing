@@ -1,0 +1,111 @@
+﻿@model RateListing.Model.ProductService
+
+@{
+    ViewBag.Title = "UpdateProductService";
+    Layout = "~/Areas/Company/Views/Shared/_UserLayout.cshtml";
+}
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+<script src="~/Scripts/ckeditor/config.js"></script>
+<script src="~/CKFinderScripts/ckfinder.js"></script>
+<link href="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+<script src="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Anasayfa</a>
+        </li>
+        <li class="breadcrumb-item active">Ürünler ve Hizmetler</li>
+    </ol>
+    <div class="box_general padding_bottom">
+        <div class="header_box version_2">
+            <h2><i class="fa fa-user"></i>Ürün / Hizmet Güncelle</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-12 add_top_30">
+                @using (Html.BeginForm("UpdateProductService", "Dashboard", FormMethod.Post, new { enctype = "multipart/form-data", id = "UrunHizmetForm" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <h4>ProductService</h4>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.CreateDate)
+                    @Html.HiddenFor(model => model.UserId)
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Ürün / Hizmet Adı</label>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Açıklama</label>
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Resim</label>
+                        <div class="col-md-10">
+                            <input type="file" name="foto" id="Picture" />
+                            @Html.ValidationMessageFor(model => model.Picture, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group mt-5">
+                        <div class="col-md-offset-2 col-md-10">
+                            <button type="submit" class="btn_1 medium">Kaydet</button>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var description = CKEDITOR.replace('Description');
+    CKFinder.setupCKEditor(description);
+</script>
+<script src="~/sparker/html/coming_soon/js/jquery-2.2.4.min.js"></script>
+<script>
+    $('#UrunHizmetForm').on('submit', function (e) {
+        e.preventDefault();
+        var form = $('#UrunHizmetForm')[0];
+        var data = new FormData(form);
+        data.set('Description', CKEDITOR.instances['Description'].getData());
+        $.ajax({
+            url: '/Company/Dashboard/UpdateProductService',
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (result) {
+                if (result.isSuccess) {
+                    Swal.fire(
+                        'Ürün / Hizmet Güncelleme',
+                        result.message,
+                        'success'
+                    )
+                    setTimeout(function () {
+                        window.location.href = "/Company/Dashboard/ProductServiceList";
+                    }, 2000);
+                }
+                else {
+                    Swal.fire(
+                        'Ürün / Hizmet Güncelleme',
+                        result.message,
+                        'danger'
+                    )
+                }
+            }
+        })
+    });
+</script>

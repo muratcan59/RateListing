@@ -1,0 +1,8 @@
+﻿@model ViewDataDictionary
+
+@{
+    if (Model != null)
+    {
+        <div class="alert @Model["class"]">@Model["Msg"]</div>
+    }
+}

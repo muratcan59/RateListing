@@ -1,0 +1,267 @@
+﻿@{
+    ViewBag.Title = "Anasayfa";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var kategoriler = RateListing.Bll.bCategory.GetAll();
+    var haberetkinlik = RateListing.Bll.bBlog.GetLast(4);
+    RateListing.Ui.Models.IlIlceViewModel model = new RateListing.Ui.Models.IlIlceViewModel();
+    var iller = RateListing.Bll.bCity.GetAll();
+    var ilceler = new List<RateListing.Model.District>();
+    if (model.CityNum != null)
+    {
+        ilceler = RateListing.Bll.bCity.GetDistricts(model.CityNum.Value);
+    }
+
+    bool isMobileApp = false;
+    if (RateListing.Ui.Models.Helper.Cookie.Get("isMobileApp") != null && RateListing.Ui.Models.Helper.Cookie.Get("isMobileApp")=="true")
+    {
+        isMobileApp = true;
+    }
+}
+<style>
+    @@media only screen and (min-width: 992px) {
+        header.sticky ul#top_menu > li > a.btn {
+            color: #444;
+        }
+    }
+</style>
+
+@Html.Partial("Menu/Index")
+
+<main class="pattern">
+    <section class="header-video">
+        <div id="hero_video">
+            <div class="wrapper">
+                <div class="container" style="margin-bottom:60px;">
+                    <h3 style="text-transform:unset;">Rating ve Networking Platformu</h3>
+                    <p></p>
+                    <form action="/firmalar" method="get">
+                        <div class="row no-gutters custom-search-input-2">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="name" placeholder="Sektör, Şirket Adı" required>
+                                    <i class="icon_search"></i>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <select class="wide nice-select" style="display:unset !important" name="city" id="CityNum">
+                                        <option value>İl Seçin</option>
+                                        @foreach (var item in iller)
+                                        {
+                                            <option class="notranslate" value="@item.CityNum">@item.Name</option>
+                                        }
+                                    </select>
+                                    <i class="icon_pin_alt"></i>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <select class="wide nice-select" style="display:unset !important" name="country" id="DistrictNum">
+                                        <option value>İlçe Seçin</option>
+                                        @foreach (var item in ilceler)
+                                        {
+                                            <option class="notranslate" value="@item.DistrictNum">@item.Name</option>
+                                        }
+                                    </select>
+                                    <i class="icon_pin_alt"></i>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <input type="submit" value="Bul">
+                            </div>
+                        </div>
+                        <!-- /row -->
+                    </form>
+                </div>
+            </div>
+        </div>
+        @*<img src="~/sparker/html/img/video_fix.png" alt="" class="header-video--media" data-video-src="video/intro" data-teaser-source="video/intro" data-provider="" data-video-width="1920" data-video-height="960">*@
+        <video autoplay loop muted id="teaser-video" class="teaser-video">
+            <source src="~/sparker/html/video/intro.mp4" type="video/mp4" />
+            <source src="~/sparker/html/video/intro.ogv" type="video/ogg" />
+        </video>
+    </section>
+    <!-- /header-video -->
+
+    <div class="main_categories" style="@(isMobileApp ? "display:none;":"")">
+        <div class="container">
+            <ul class="clearfix">
+                <li>
+                    <a href="/rating">
+                        <i class="icon-star-empty"></i>
+                        <h3>RATING</h3>
+                    </a>
+                </li>
+                <li>
+                    <a href="/networking">
+                        <i class="icon-network-1"></i>
+                        <h3>NETWORK</h3>
+                    </a>
+                </li>
+                <li>
+                    <a href="/cozumler">
+                        <i class="icon-thumbs-up-alt"></i>
+                        <h3>ÇÖZÜMLER</h3>
+                    </a>
+                </li>
+                <li>
+                    <a href="/yapay-zeka-cozumleri">
+                        <i class="icon-laptop-1"></i>
+                        <h3>YAPAY ZEKA</h3>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /main_categories -->
+
+    <div class="container-fluid margin_80_55">
+        <div class="main_title_2">
+            <span><em></em></span>
+            <h2 style="text-transform:capitalize">Sektörler</h2>
+            <p>@*Cum doctus civibus efficiantur in imperdiet deterruisset.*@</p>
+        </div>
+        <div id="reccomended" class="owl-carousel owl-theme" data-pause="false" data-interval="900">
+            @foreach (var item in kategoriler)
+            {
+                <div class="item">
+                    <div class="strip grid">
+                        <figure>
+                            <a href="/firmalar?name=@item.Name"><img src="~/Uploads/Category/@item.Id/@item.Picture" class="img-fluid" alt="" width="400" height="266"><div class="read_more"><span>Daha Fazlası</span></div></a>
+                            <small style="text-transform:capitalize">@item.Name</small>
+                        </figure>
+                        <div class="wrapper">
+                            @*<a href="#0" class="wish_bt"></a>*@
+                            <h3><a href="/firmalar?name=@item.Name">@item.Name</a></h3>
+                            @*<small>Zeki Şimşek</small>*@
+                            @*<p>Id placerat tacimates definitionem sea, prima quidam vim no. Duo nobis persecuti cu.</p>*@
+                            @*<a class="address" href="https://www.google.com/maps/place/Telsiz,+85.+Sk.+No:78,+34020+Zeytinburnu%2Fİstanbul/@('@')40.9996282,28.9111437,17z/data=!3m1!4b1!4m5!3m4!1s0x14cabba43ea234ab:0x9f515408d2fa4679!8m2!3d40.9996282!4d28.9133324">Telsiz Mah. 85. Sok. 78 Zeytinburnu, İstanbul</a>*@
+                        </div>
+                    </div>
+                </div>
+                <!-- /item -->
+            }
+        </div>
+        <!-- /carousel -->
+        @*<div class="container">
+                <div class="btn_home_align"><a href="/firmalar" class="btn_1 rounded">Tümünü Gör</a></div>
+            </div>*@
+    </div>
+
+
+    <div class="call_section pattern">
+        <div class="wrapper">
+            <div class="container" style="padding-top:25px;padding-bottom:5px; ">
+                <div class="main_title_2">
+                    <span><em></em></span>
+                    <h2>NASIL ÇALIŞIR?</h2>
+                    <p>@*Cum doctus civibus efficiantur in imperdiet deterruisset.*@</p>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="box_how">
+                            <i class="pe-7s-search"></i>
+                            <h3>Şirket Arama:</h3>
+                            <p>Aradığınız sektör veya şirketi girin; il ve ilçeyi belirterek ara butonuna tıklayın.İlgili şirketler listelenecektir.</p>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="box_how">
+                            <i class="pe-7s-info"></i>
+                            <h3>Şirket Listesi:</h3>
+                            <p>Şirketlerin bilgi ve puanları yer alır. Detaylı bilgi için şirket logosuna tıklayın, şirket özel sayfasına gidiniz.</p>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="box_how">
+                            <i class="pe-7s-like2"></i>
+                            <h3>Şirket Özel Sayfası:</h3>
+                            <p>Şirketin detaylı bilgi ve belgeleri, kurumsal puanı, görselleri, müşteri puanı, referans ve şikayetleri yer alır.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- /row -->
+                <p style="@(isMobileApp ? "display:none;":"")" class="text-center add_top_30 wow bounceIn" data-wow-delay="0.5"><a href="/Account/Register" class="btn_1 rounded">Akredite Ol</a></p>
+            </div>
+        </div>
+        <!-- /wrapper -->
+    </div>
+    <!--/call_section-->
+
+    <div class="container margin_60_35" style="@(isMobileApp ? "display:none;":"")">
+        <div class="main_title_3">
+            <span></span>
+            <h2>Popüler Aramalar</h2>
+            <p>@*Cum doctus civibus efficiantur in imperdiet deterruisset.*@</p>
+            @*<a href="/firmalar">Tümünü Gör</a>*@
+        </div>
+        <div class="row add_bottom_30">
+            @foreach (var item in kategoriler.OrderBy(r => Guid.NewGuid()).Take(4))
+            {
+                <div class="col-lg-3 col-sm-6">
+                    <a href="/firmalar?name=@item.Name" class="grid_item small">
+                        <figure>
+                            <img src="~/Uploads/Category/@item.Id/@item.Picture?width=400&height=267" alt="">
+                            <div class="info">
+                                @*<div class="cat_star"><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i></div>*@
+                                <h3>@item.Name</h3>
+                            </div>
+                        </figure>
+                    </a>
+                </div>
+            }
+        </div>
+        <!-- /row -->
+
+        <div class="main_title_3">
+            <span></span>
+            <h2>Müşteri Yorumları</h2>
+            <p>@*Cum doctus civibus efficiantur in imperdiet deterruisset.*@</p>
+            @*<a href="/firmalar">Tümünü Gör</a>*@
+        </div>
+        <div class="row">
+
+            <div class="col-lg-6 col-sm-6">
+                <img style="width:100%" src="~/sparker/html/img/musteri_yorumu_1.png" alt="">
+            </div>
+
+            <div class="col-lg-6 col-sm-6">
+                <img style="width:100%" src="~/sparker/html/img/musteri_yorumu_2.png" alt="">
+            </div>
+
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+
+
+    <div class="container margin_80_55" style="@(isMobileApp ? "display:none;":"")">
+        <div class="main_title_2">
+            <span><em></em></span>
+            <h2>Haberler ve Etkinlikler</h2>
+            <p>@*Cum doctus civibus efficiantur in imperdiet deterruisset.*@</p>
+        </div>
+        <div class="row">
+            @foreach (var item in haberetkinlik)
+            {
+                <div class="col-lg-6">
+                    <a class="box_news" href="/haberler-ve-etkinlikler/@item.Url">
+                        <figure><img src="~/Uploads/Blog/@item.Id/@item.Picture" alt=""></figure>
+                        <ul>
+                            <li>@item.CreateDate.Value.ToShortDateString()</li>
+                        </ul>
+                        <h4>@item.Name</h4>
+                        @Html.Raw(item.Summary)
+                    </a>
+                </div>
+                <!-- /box_news -->
+            }
+        </div>
+        <!-- /row -->
+        <p class="btn_home_align"><a href="/haberler-ve-etkinlikler" class="btn_1 rounded">Tümünü Gör</a></p>
+    </div>
+    <!-- /container -->
+</main>

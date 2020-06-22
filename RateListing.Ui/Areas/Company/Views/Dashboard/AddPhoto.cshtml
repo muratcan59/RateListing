@@ -1,0 +1,99 @@
+﻿@model RateListing.Model.Photo
+
+@{
+    ViewBag.Title = "Galeri Ekle";
+    Layout = "~/Areas/Company/Views/Shared/_UserLayout.cshtml";
+}
+
+<link href="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+<script src="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Anasayfa</a>
+        </li>
+        <li class="breadcrumb-item active">Galeri</li>
+    </ol>
+    <div class="box_general padding_bottom">
+        <div class="header_box version_2">
+            <h2><i class="fa fa-user"></i>Galeri Ekle</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-12 add_top_30">
+                @using (Html.BeginForm("AddPhoto", "Dashboard", FormMethod.Post, new { enctype = "multipart/form-data", id="FotoForm" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        <h4></h4>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2">Resim</label>
+                            <div class="col-md-12">
+                                <input type="file" name="foto" id="Picture" required/>
+                                @Html.ValidationMessageFor(model => model.Picture, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2">Sıra No</label>
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.OrderNo, new { htmlAttributes = new { @class = "form-control"} })
+                                @Html.ValidationMessageFor(model => model.OrderNo, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn_1 medium">Ekle</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/sparker/html/coming_soon/js/jquery-2.2.4.min.js"></script>
+<script>
+    $('#FotoForm').on('submit', function (e) {
+        e.preventDefault();
+        var form = $('#FotoForm')[0];
+        var data = new FormData(form);
+
+        $.ajax({
+            url: '/Company/Dashboard/AddPhoto',
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (result) {
+                if (result.isSuccess) {
+                    Swal.fire(
+                        'Galeri Ekleme',
+                        result.message,
+                        'success'
+                    )
+                    setTimeout(function () {
+                        window.location.href = "/Company/Dashboard/PhotoList";
+                    }, 2000);
+                }
+                else {
+                    Swal.fire(
+                        'Galeri Ekleme',
+                        result.message,
+                        'danger'
+                    )
+                }
+            }
+        })
+    });            
+</script>

@@ -1,0 +1,50 @@
+﻿@model IEnumerable<RateListing.Model.OfferRequest>
+@{
+    ViewBag.Title = "Öneri ve Teklif Listesi";
+    Layout = "~/Areas/Company/Views/Shared/_UserLayout.cshtml";
+}
+
+    <div class="container-fluid">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#">Anasayfa</a>
+            </li>
+            <li class="breadcrumb-item active">Teklif Listesi</li>
+        </ol>
+        <div class="box_general">
+            <div class="header_box">
+                <h2 class="d-inline-block">Teklif Listesi</h2>
+            </div>
+            <div class="list_general reviews">
+                <div class="table-responsive pb-5">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Ad Soyad</th>
+                                <th>Email</th>
+                                <th>Telefon</th>
+                                <th>Tarih</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderByDescending(w=>w.CreateDate))
+                            {
+                                <tr>
+                                    <td>@item.NameSurname</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.Phone</td>
+                                    <td>@item.CreateDate</td>
+                                    <td>
+                                        <a href="/Company/Dashboard/RequestDetail?requestId=@item.Id" class="btn btn-info btn-sm">Görüntüle</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+

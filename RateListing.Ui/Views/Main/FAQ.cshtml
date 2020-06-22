@@ -1,0 +1,154 @@
+﻿    
+@{
+    ViewBag.Title = "SSS";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<header class="header_in is_sticky menu_fixed">@Html.Partial("Menu/Other")</header>
+
+<div class="sub_header_in sticky_header">
+    <div class="container">
+        <h1>Sıkça Sorulan Sorular</h1>
+    </div>
+    <!-- /container -->
+</div>
+<!-- /sub_header -->
+
+<main>
+    <div class="container margin_60_35">
+        <div class="row">
+            @*<aside class="col-lg-3" id="faq_cat">
+                    <div class="box_style_cat" id="faq_box">
+                        <ul id="cat_nav">
+                            <li><a href="#payment" class="active"><i class="icon_document_alt"></i>Payments</a></li>
+                            <li><a href="#tips"><i class="icon_document_alt"></i>Suggestions</a></li>
+                            <li><a href="#reccomendations"><i class="icon_document_alt"></i>Reccomendations</a></li>
+                            <li><a href="#terms"><i class="icon_document_alt"></i>Terms&amp;conditons</a></li>
+                            <li><a href="#booking"><i class="icon_document_alt"></i>Booking</a></li>
+                        </ul>
+                    </div>
+                </aside>*@
+
+            <div class="col-lg-12" id="faq">
+                <h4 class="nomargin_top"></h4>
+                <div role="tablist" class="add_bottom_45 accordion_2" id="payment">
+                    <div class="card">
+                        <div class="card-header" role="tab">
+                            <h5 class="mb-0">
+                                <a data-toggle="collapse" href="#collapseOne_payment" aria-expanded="true"><i class="indicator ti-minus"></i>NEDEN RATE LİSTİNG PLATFORMU?</a>
+                            </h5>
+                        </div>
+
+                        <div id="collapseOne_payment" class="collapse show" role="tabpanel" data-parent="#payment">
+                            <div class="card-body">
+                                <p>Müşteri memnuniyeti, ticaretin tarihi kadar eskidir. Buradan hareketle yeni müşterilere ulaşma konusunda, işletmeler için geliştirdiğimiz yapay zeka destekli proğram ve metotların temeli ’’güven ve tanıtım’’ dır. Akredite şirketlerimiz ise geliştirdiğimiz bu proğramların katkılarıyla global piyasaların tam ortasında yer almaktadır:</p>
+                                <p>a- Güven: Şirketlerin kanun ve mevzuatlar ile etik ve global standartlara uygunluklarını belgeler, müşteri yorumları eşliğinde şeffaf bir şekilde yayımlar.</p>
+                                <p>b- Tanıtım:Şirketlerin bilgi, belge tarihçe ve hizmet tanıtımlarını network ağımızda 7/24, 365 gün sınırlar ve dil engelini aşarak Türkçe ve İngilizce olarak dünyanın online olunabilen her yerinde kesintisiz reklamlarını yapmaktayız.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /card -->
+                    <div class="card">
+                        <div class="card-header" role="tab">
+                            <h5 class="mb-0">
+                                <a class="collapsed" data-toggle="collapse" href="#collapseTwo_payment" aria-expanded="false">
+                                    <i class="indicator ti-plus"></i>HANGİ ŞİRKETLER AKREDİTE OLABİLİR?
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapseTwo_payment" class="collapse" role="tabpanel" data-parent="#payment">
+                            <div class="card-body">
+                                <p>Rate Listing platformuna küçük işletme veya holdingler, ister tek bir lokasyon ister multi lokasyona sahip işletmeler; ayrıca hangi sektörden olursa olsun(eğitim-öğretimden sağlığa, gayri menkulden restaurant’a, tekstilden markete, ulaşımdan güzellik salonuna, avukatlık ofisinden muhasebe ofisine kadar…) kuruluşlarını tamamlamış, aktif faaliyette bulunan firmalar aşağıdaki bilgi ve belgeleri ofisimize sundukları ve tarafımızca kontrol edilip onaylandığı takdirde akredite olmaya hak kazanırlar.</p>
+                                <p>Kontrol edilen bilgi ve belgeler ise:</p>
+                                <p>1- Kuruluş belgeleri,</p>
+                                <p>2- Şirket tipi, </p>
+                                <p>3- Kuruluş yılı ve logosu,</p>
+                                <p>4- Lisans ve faaliyet belgeleri,</p>
+                                <p>5- Oda ve federasyon kayıtları, </p>
+                                <p>6- İletişim ve sosyal medya bilgileri,</p>
+                                <p>7- Lokasyon ve yetkili kişi bilgisi,</p>
+                                <p>8-Banka kredi skoru,</p>
+                                <p>Not: Platformumuz; kamu kurum ve kuruluşları, vakıf, sendika, oda ve dernekleri akredite yapmaz ve haklarında bildirimde bulunmaz.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /card -->
+                    <div class="card">
+                        <div class="card-header" role="tab">
+                            <h5 class="mb-0">
+                                <a class="collapsed" data-toggle="collapse" href="#collapseThree_payment" aria-expanded="false">
+                                    <i class="indicator ti-plus"></i>RATE LİSTİNG, ŞİRKET TAVSİYESİNDE BULUNABİLİR Mİ?
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapseThree_payment" class="collapse" role="tabpanel" data-parent="#payment">
+                            <div class="card-body">
+                                <p>Platformumuzun ana kuralı tarafsız ve adil olmaktır; bu nedenden dolayı tüketicilere herhangi bir şirket, firma, marka, servis veya ürün hakkında direkt olarak tavsiyede bulunmaz.</p>
+                                <p>Bununla birlikte network ağımızda firmalarımızın detaylı bilgilerine, ürün veya servislerinin açıklamarına, görsellerine ayrıca müşteri fiyat talep formuna yer vererek tüketicilerin bu bilgiler ışığında doğru firmalara yönelmelerine öncülük eder.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /card -->
+                    <div class="card">
+                        <div class="card-header" role="tab">
+                            <h5 class="mb-0">
+                                <a class="collapsed" data-toggle="collapse" href="#collapseFour_payment" aria-expanded="false">
+                                    <i class="indicator ti-plus"></i>PLATFORMUN AKREDİTE ŞİRKETLERE FAYDASI NEDİR?
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapseFour_payment" class="collapse" role="tabpanel" data-parent="#payment">
+                            <div class="card-body">
+                                <p>Türkiye’den ve dünyadan tüketicilerin bilgi sahibi olmadığı bir çok sektör veya şirketleri, platformumuz aracılığı ile tanımakta ve şirketlerin haklarında detaylı bilgi ve belgelere müşteriler ulaşmaktadır.Bu sebep ile platformumuz şirketleri akredite etmekle kalmayıp yegane var oluş gayesi olan şirketlerin ‘‘güven oluşturması ve reklamları’’ için çalışmakta ve programlar geliştirmektedir.</p>
+                                <p>Platformumuz, aşağıda belirtilen imkanları ile akredite şirketlerimize tahminlerinin ötesinde prestij kazandırmakta ve ticari fırsatlar sunmaktadır:</p>
+                                <p>1-Şirketinizi bilmeyen kalmasın! İşletmelerin bilgi ve belgelerini, faaliyet alanlarını şeffaf bir şekilde yayımlar.</p>
+                                <p>2-Sesinizi herkese duyurun! Network ağımızda işletmeler, kendilerine ayrılan özel sayfalarında mal veya servisleri hakkında bilgi verebilir ve fotoğraflarını yayınlayabilirler.</p>
+                                <p>3-Global olmanın yolunu açıyoruz! Şirketlerin tüm bilgi ve belgelerini Türkçe ve İngilizce olarak ülke içinde ve dışında tanıtıyor ve şirketlerin reklamlarını yapıyoruz. Böylece farklı milletlerden tüketicilerin de işletmelerimizden faydalanmasını aynı zamanda dünya ile entegre olmalarına katkıda bulunuyoruz.</p>
+                                <p>4-Rate Listing işletmenizi iki farklı rating degerlendirmesine tabii tutar:</p>
+                                <p>&nbsp; a- Kurumsal rating </p>
+                                <p>&nbsp; b- Müşteri ratingi</p>
+                                <p>5-Referanslar, müşteriler ile yaşanmış olumlu hikayelerdir; referans olan müşteriler, işletmelerin en iyi şahitleri ve gönüllü elçileridir. Referansları yayımlayarak şirketlerin güven ve kalitelerini potansiyel müşterilerin bilgisine sunar ve pazar paylarını arttırmalarına yardımcı olur.</p>
+                                <p>6-Şikayet talep formu ile müşterilerin istek ve arzularını belirler.Müşterileri anlamada işletmelere yardımcı olur. Ayrıca şirketlerin saygınlıklarını ve müşteri potansiyellerini korumalarını sağlar.</p>
+                                <p>7-Platformumuz ana prensibi olan tarafsız ve adil konumu ile şikayetlerde arabulucu rolü üstlenerek çözümler üretir.</p>
+                                <p>8-Fiyatları öğrenmek hiç bu kadar kolay olmamıştı. Fiyat talep formu ile müşteriler nerede olurlarsa olsunlar ürün veya servisleriniz hakkında işletmenizden fiyat talep edebilir, fiyatları karşılaştırabilirler.</p>
+                                <p>9-Şubelerin her bir lokasyonu bağımsız olarak tanıtılır, mal ve servisleri hakkında ayrı ayrı bilgi verilir. Böylece bir lokasyonda oluşabilecek olumsuz mal veya hizmetlerden diğer şubeler korunmuş olur.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /card -->
+                    <div class="card">
+                        <div class="card-header" role="tab">
+                            <h5 class="mb-0">
+                                <a class="collapsed" data-toggle="collapse" href="#collapseFive_payment" aria-expanded="false">
+                                    <i class="indicator ti-plus"></i>PLATFORMUN MÜŞTERİLERE FAYDASI NEDİR?
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapseFive_payment" class="collapse" role="tabpanel" data-parent="#payment">
+                            <div class="card-body">
+                                <p>Rate Listing platformu kendi kural ve yönetmeliği çerçevesinde firmalar hakkındaki detaylı bilgileri ve belgeleri Türkiye ve dünyada yayımlayarak ülke içinde ve dışındaki müşterileri güvenilir ve doğru adreslere yönlendirmektedir.</p>
+                                <p>Bu çerçevede Rate Listing platformunun tüketicilere aşağıdaki faydaları sağlamaktadır.</p>
+                                <p>1-Platformumuz şirketlerin Türkiye Cumhuriyeti kanunlarına ve sektörün mevzuatlarına uygunluklarını bilgi ve belgeleri ışığında kontrol ederek yayınlar.</p>
+                                <p>2-İşletmelerin bilgi ve belgelerinin yetkili mercilerde kontrol edilmesinden dolayı  gayriresmi ve sahte işletmelere yer verilmez. Dolaysı ile art niyetli kişi ve kuruluşlara karşı tüketicileri uyarır.</p>
+                                <p>3-Şirket, tarihçesini, hizmetlerini, iletişim bilgilerini ve diğer bilgileri İngilizceye tercüme ederek işletmenin bulunduğu mahalden, ülkemizdeki hatta dünyanın her tarafındaki müşterilerinin yararlanmasını sağlar.</p>
+                                <p>4-Ofisimiz işletmeleri iki farklı rating degerlendirmesine tabii tutar:</p>
+                                <p>&nbsp; a- Kurumsal rating</p>
+                                <p>&nbsp; b- Müşteri ratingi</p>
+                                <p>5-Müşterilerin şikayetlerini tarafsız ve adil olarak ticari ve etik kurallar dahilinde ele alır ve ihtilafların çözümleri konusunda taraflara yardımcı olur.</p>
+                                <p>6-Markanın her bir şubesi ayrı ayrı degerlendirilir. Müşterilere her bir lokasyon hakkında geniş bilgi sunar.</p>
+                                <p>7-Müşteri referans ve şikayetlerini yayımlayarak potansiyel müşterileri en baştan, doğru işletmelere yönlendirir.</p>
+                                <p>8-Fiyat talep formu ile müşteriler bulundukları yerden işletmelerin hizmetleri hakkında fiyat talep edebilir ve bunları diğer işletmeler ile karşılaştırabilirler.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /card -->
+                </div>
+                <!-- /accordion payment -->
+            </div>
+            <!-- /col -->
+        </div>
+        <!-- /row -->
+    </div>
+    <!--/container-->
+</main>
+<!--/main-->

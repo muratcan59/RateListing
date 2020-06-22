@@ -1,0 +1,547 @@
+﻿@model List<RateListing.Model.User>
+@{
+    ViewBag.Title = "Firmalar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string SearchName = ViewBag.SearchName;
+    int? SearchCity = ViewBag.SearchCity;
+    int? SearchCountry = ViewBag.SearchCountry;
+    var filterModel = (RateListing.Ui.Models.FilterModel)ViewBag.FilterModel;
+
+    var iller = RateListing.Bll.bCity.GetAll();
+    var ilceler = new List<RateListing.Model.District>();
+    if (SearchCity != null)
+    {
+        ilceler = RateListing.Bll.bCity.GetDistricts(SearchCity.Value);
+    }
+
+    var lang = RateListing.Ui.Models.Helper.LangHelper.GetLang();
+
+}
+
+<style>
+
+    @@media (max-width: 991px) {
+
+        .pattern {
+            top: 80px;
+        }
+    }
+</style>
+
+<header class="header_in">@Html.Partial("Menu/Other")</header>
+<main class="pattern">
+    <div id="results" style="">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-10">
+                    @if (Model != null)
+                    {
+                        @*<h4>Arama kriterlerine uygun&nbsp;&nbsp;<strong>@Model.Count sonuç</strong></h4>*@
+                        <h4>Arama kriterlerinize uygun sonuçlar listeleniyor.</h4>
+                    }
+                </div>
+                <div class="col-lg-9 col-md-8 col-2">
+                    <form action="/firmalar" method="get">
+                        <a href="#0" class="search_mob btn_search_mobile"></a> <!-- /open search panel -->
+                        <div class="row no-gutters custom-search-input-2 inner">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <input class="form-control" value="@SearchName" name="name" type="text" placeholder="Sektör, Şirket Adı" required>
+                                    <i class="icon_search"></i>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <select class="wide nice-select" style="display:unset !important" name="city" id="CityNum">
+                                    <option value>İl Seçin</option>
+                                    @foreach (var item in iller)
+                                    {
+                                        if (SearchCity != null)
+                                        {
+                                            if (item.CityNum == SearchCity.Value)
+                                            {
+                                                <option class="notranslate" value="@item.CityNum" selected>@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option class="notranslate" value="@item.CityNum">@item.Name</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option class="notranslate" value="@item.CityNum">@item.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <i class="icon_pin_alt"></i>
+                            </div>
+                            <div class="col-lg-3">
+                                <select class="wide nice-select" style="display:unset !important" name="country" id="DistrictNum">
+                                    <option value>İlçe Seçin</option>
+                                    @foreach (var item in ilceler)
+                                    {
+                                        if (SearchCountry != null)
+                                        {
+                                            if (item.DistrictNum == SearchCountry.Value)
+                                            {
+                                                <option value="@item.DistrictNum" selected>@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.DistrictNum">@item.Name</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.DistrictNum">@item.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <i class="icon_pin_alt"></i>
+                            </div>
+                            <div class="col-lg-1">
+                                <input type="submit" value="Bul">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /row -->
+            <div class="search_mob_wp" style="display:none">
+                <div class="custom-search-input-2">
+                    <form action="/firmalar" method="get">
+                        <div class="form-group">
+                            <input class="form-control" value="@SearchName" name="name" type="text" placeholder="Sektör, Şirket Adı" required>
+                            <i class="icon_search"></i>
+                        </div>
+                        <div class="form-group">
+                            <select class="wide nice-select" style="display:unset !important" name="city" id="CityNum_mobile">
+                                <option value>İl Seçin</option>
+                                @foreach (var item in iller)
+                                {
+                                    if (SearchCity != null)
+                                    {
+                                        if (item.CityNum == SearchCity.Value)
+                                        {
+                                            <option value="@item.CityNum" selected>@item.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.CityNum">@item.Name</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.CityNum">@item.Name</option>
+                                    }
+                                }
+                            </select>
+                            <i class="icon_pin_alt"></i>
+                        </div>
+                        <div class="form-group">
+                            <select class="wide nice-select" style="display:unset !important" name="country" id="DistrictNum_mobile">
+                                <option value>İlçe Seçin</option>
+                                @foreach (var item in ilceler)
+                                {
+                                    if (SearchCountry != null)
+                                    {
+                                        if (item.DistrictNum == SearchCountry.Value)
+                                        {
+                                            <option value="@item.DistrictNum" selected>@item.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.DistrictNum">@item.Name</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.DistrictNum">@item.Name</option>
+                                    }
+                                }
+                            </select>
+                            <i class="icon_pin_alt"></i>
+                        </div>
+
+                        <input type="submit" value="Bul">
+                    </form>
+                </div>
+            </div>
+            <!-- /search_mobile -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /results -->
+
+    <div class="filters_listing version_2  sticky_horizontal">
+        <div class="container">
+            <ul class="clearfix">
+                <li style="display:none">
+                    <div class="switch-field">
+                        <input type="radio" id="all" name="listing_filter" value="all" checked>
+                        <label for="all">Tümü</label>
+                        <input type="radio" id="popular" name="listing_filter" value="popular">
+                        <label for="popular">Popüler</label>
+                        <input type="radio" id="latest" name="listing_filter" value="latest">
+                        <label for="latest">En Son</label>
+                    </div>
+                </li>
+                @if (Model.Any())
+                {
+                    <li>
+                        <a class="btn_map notranslate" data-toggle="collapse" href="#collapseMap" aria-expanded="false" aria-controls="collapseMap" data-text-swap="@(lang==RateListing.Ui.Models.Helper.LangType.tr?"Haritayı Gizle":"Hide Map")" data-text-original="@(lang==RateListing.Ui.Models.Helper.LangType.tr?"Haritada Gör":"See on Map")">@(lang==RateListing.Ui.Models.Helper.LangType.tr?"Haritada Gör":"See on Map")</a>
+                    </li>
+                }
+
+                @*
+                    <li>
+                        <div class="layout_view">
+                            <a href="#0" class="active"><i class="icon-th"></i></a>
+                            <a href="listing-2.html"><i class="icon-th-list"></i></a>
+                            <a href="list-map.html"><i class="icon-map"></i></a>
+                        </div>
+                    </li>
+                *@
+            </ul>
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /filters -->
+    <div class="collapse" id="collapseMap">
+        <div id="map" class="map"></div>
+    </div>
+    <!-- /Map -->
+    <div class="container text-center mt-3">
+        <a>
+            İlgilendiğiniz şirketin üzerine tıklayarak özel sayfasında şirketin detaylı bilgilerine ulaşabilirsiniz.
+        </a>
+    </div>
+    <div class="container margin_30_5">
+
+        <div class="row">
+            <aside class="col-lg-3" id="sidebar">
+                <div id="filters_col">
+                    <a data-toggle="collapse" href="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters" id="filters_col_bt">Filtrele </a>
+                    <div class="collapse show" id="collapseFilters">
+                        <form action="" method="post">
+                            <div class="filter_type">
+                                <h6 style="text-transform:capitalize">Kategoriler</h6>
+                                <ul>
+                                    @for (int i = 0; i < filterModel.Categories.Count; i++)
+                                    {
+                                        //var kategoriMiktar = RateListing.Bll.bUser.GetComCate(filterModel.Categories[i].Name);
+
+                                        <li>
+                                            <label style="text-transform:capitalize" class="container_check">
+                                                @filterModel.Categories[i].Name @*<small style="display:none">@kategoriMiktar.Count</small>*@
+                                                @Html.CheckBox("filterModel.Categories[" + i + "].Value", filterModel.Categories[i].Value)
+                                                <span class="checkmark"></span>
+                                                @Html.Hidden("filterModel.Categories[" + i + "].Name", filterModel.Categories[i].Name)
+                                                @Html.Hidden("filterModel.Categories[" + i + "].Id", filterModel.Categories[i].Id)
+                                            </label>
+                                        </li>
+                                    }
+
+                                </ul>
+                            </div>
+                            <div class="filter_type" style="display:none;" id="distance_div">
+                                <h6>Mesafe</h6>
+                                <div class="distance"> <span id="distance_span"></span> km mesafede </div>
+                                <input id="distance_input" name="filterModel.Mesafe" type="range" min="0" max="100" step="1" value="@filterModel.Mesafe" data-orientation="horizontal">
+                                @Html.Hidden("filterModel.currentLocation.latitude")
+                                @Html.Hidden("filterModel.currentLocation.longitude")
+                            </div>
+                            <div class="filter_type">
+                                <h6>Kurumsal Rating</h6>
+                                <ul>
+                                    <li>
+                                        <label class="container_check">
+                                            Mükemmel 9+ @*<small>34</small>*@
+                                            @Html.CheckBox("filterModel.mukemmel", filterModel.mukemmel)
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">
+                                            Çok İyi 8+ @*<small>21</small>*@
+                                            @Html.CheckBox("filterModel.cokiyi", filterModel.cokiyi)
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">
+                                            İyi 7+ @*<small>15</small>*@
+                                            @Html.CheckBox("filterModel.iyi", filterModel.iyi)
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">
+                                            Orta 6+ @*<small>34</small>*@
+                                            @Html.CheckBox("filterModel.orta", filterModel.orta)
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                </ul>
+
+                                @*<div class="distance"> <span id="rating_span"></span> Puan ve üzeri olan firmalar</div>
+                                    <input id="rating_input" name="filterModel.KurumsalRating" type="range" min="1" max="12" step="1" value="@filterModel.KurumsalRating" data-orientation="horizontal">*@
+                            </div>
+                            <div class="filter_type">
+                                <h6>Müşteri Ratingi</h6>
+                                <ul>
+                                    <li>
+                                        <label class="container_check">
+                                            <i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i> @*<small>34</small>*@
+                                            @Html.CheckBox("filterModel.yildiz5", filterModel.yildiz5)
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">
+                                            <i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i class="icon-star-empty"></i> @*<small>21</small>*@
+                                            @Html.CheckBox("filterModel.yildiz4", filterModel.yildiz4)
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">
+                                            <i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i> @*<small>15</small>*@
+                                            @Html.CheckBox("filterModel.yildiz3", filterModel.yildiz3)
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">
+                                            <i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i> @*<small>34</small>*@
+                                            @Html.CheckBox("filterModel.yildiz2", filterModel.yildiz2)
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">
+                                            <i style="color:#ffc107" class="icon-star"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i><i class=" icon-star-empty"></i> @*<small>34</small>*@
+                                            @Html.CheckBox("filterModel.yildiz1", filterModel.yildiz1)
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                </ul>
+                                @*<div class="distance"> <span id="customerRating_span"></span> Yıldız ve üzeri olan firmalar</div>
+                                    <input id="customerRating_input" name="filterModel.MusteriRatingi" type="range" min="1" max="5" step="1" value="@filterModel.MusteriRatingi" data-orientation="horizontal">*@
+                            </div>
+                            <div class="text-center"><button style="padding: 8px 15px;" class="btn_1 mt-3">Filtreyi Uygula</button></div>
+                        </form>
+                    </div>
+                    <!--/collapse -->
+                </div>
+                <!--/filters col-->
+            </aside>
+            <!-- /aside -->
+
+            @if (Model.Any())
+            {
+                <div class="col-lg-9">
+                    @foreach (var item in Model)
+                    {
+                        var kategoriAd = RateListing.Bll.bCategory.GetById(item.CategoryId.Value);
+                        var galeri = RateListing.Bll.bPhoto.GetAll(item.Id);
+                        <div class="strip list_view">
+                            <div class="row no-gutters">
+                                <div class="col-lg-5">
+                                    <figure>
+                                        @if (galeri.Count != 0)
+                                        {
+                                            <a href="/firma/@item.Url"><img src="~/Uploads/User/@item.Id/Gallery/@galeri.FirstOrDefault().Picture" class="img-fluid" alt=""><div class="read_more"><span>Daha Fazlası</span></div></a>
+                                        }
+                                        else
+                                        {
+                                            <a href="/firma/@item.Url"><img src="~/sparker/html/img/location_1.jpg" class="img-fluid" alt=""><div class="read_more"><span>Daha Fazlası</span></div></a>
+                                        }
+                                        <small>@kategoriAd.Name</small>
+                                        @*@if (item.IsSale)
+                                            {
+                                                <small style="top:unset;bottom:30px;color:#32a067;background-color:white">Satılık</small>
+                                            }*@
+                                    </figure>
+                                </div>
+                                <div class="col-lg-7">
+                                    <div class="wrapper">
+                                        <h3 class="notranslate"><a href="/firma/@item.Url">@item.Name</a></h3>
+                                        <small class="notranslate">@item.Email</small>
+                                        <small class="notranslate" style="float:right">@item.PhoneNumber</small>
+                                        <p class="notranslate">@item.Address</p>
+                                        @if (RateListing.Bll.bUser.isOpenNow(item.Id))
+                                        {
+                                            <span class="loc_open">Şu an Açık</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="loc_closed">Kapalı</span>
+                                        }
+                                        <span class="loc_open ml-1"><a style="color: #32a067;" href="tel:@item.PhoneNumber">Hemen Ara</a></span>
+                                        <span class="loc_open ml-1"><a style="color: #32a067;" href="javascript:void(0)" onclick="teklifButonList('@item.Id')">Teklif Al</a></span>
+
+                                        <span style="cursor:pointer;" class="loc_open ml-1" id="dropdownMenuButton_@item.Id" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Paylaş
+                                        </span>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton_@item.Id">
+                                            <a class="dropdown-item" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=@Request.Url.Host/firma/@item.Url"><i class="ti-facebook"></i> Facebook'da Paylaş</a>
+                                            <a class="dropdown-item" target="_blank" href="https://twitter.com/share?url=@Request.Url.Host/firma/@item.Url&text=@item.Name"><i class="ti-twitter"></i> Twitter'da Paylaş</a>
+                                        </div>
+
+                                        <br /><br />
+                                        <a class="address" target="_blank" href="https://www.google.com/maps/place/@item.Address">Haritada Gör</a>
+                                    </div>
+                                    <ul>
+                                        <li><span><b>Müşteri Ratingi</b></span><br /><div>@Html.Partial("_stars", RateListing.Bll.bComment.ScoreAvg(item.Id))</div></li>
+                                        <li><span><b>Kurumsal Rating</b></span><br /><div class="score" style="margin-top: 5px;float: right;"><strong>@RateListing.Bll.bUser.GetCorporateScore(item.Id)</strong></div></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- /strip list_view -->
+                    }
+                    @*<p class="text-center"><a href="#0" class="btn_1 rounded add_top_30">Daha Fazla</a></p>*@
+                </div>
+                <!-- /col -->
+            }
+            else
+            {
+
+                <div class="col-md-9">
+                    <div id="confirm">
+                        <div class="icon icon--order-success svg add_bottom_15">
+                            <span style="font-size:100px;" class="pe-7s-close-circle"></span>
+                        </div>
+                        <h2>Arama kriterlerinize uygun sonuç bulunamadı.</h2>
+                        <p>Kriterleri değiştirerek tekrar deneyebilir veya yeni bir arama yapabilirsiniz.</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+
+</main>
+
+<div class="modal fade" id="teklif-dialog" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div><img style="float:left;" src="~/sparker/html/img/logo.png" width="165" height="35" alt="" class="logo_sticky"></div>
+                <h5 style="margin-left:30px;" class="modal-title">Fiyat Teklifi Al</h5>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="TeklifForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Ad - Soyad:</label>
+                        <input type="text" name="NameSurname" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">E-Mail:</label>
+                        <input type="text" name="Email" class="form-control" pattern="[a-z0-9._%+-]+@("@")[a-z0-9.-]+\.[a-z]{2,63}$" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Telefon No:</label>
+                        <input type="text" name="Phone" onkeypress="return onlyNumberKey(event)" pattern="[0-9]{10}" title="10 Haneli ve Boşluksuz Olacak Şekilde Giriniz." class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Mesajınız:</label>
+                        <textarea class="form-control" name="Description" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Mesajı Gönder</button>
+                </div>
+                <input type="hidden" name="UserId" id="UserId" />
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/sparker/html/js/common_scripts.js"></script>
+<link href="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+<script src="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+
+
+@Html.Partial("_mapList", Model.Where(w => !string.IsNullOrEmpty(w.Latitude) && !string.IsNullOrEmpty(w.Longitude)).ToList());
+
+
+<script>
+    $("#CityNum_mobile").change(function () {
+        var cityId = $("#CityNum_mobile").val();
+        $("#DistrictNum_mobile").html("<option value>@(lang==RateListing.Ui.Models.Helper.LangType.tr?"İlçe Seçin":"Choose District")</option>");
+        $.get("/Main/Districts?cityNum=" + cityId, function (result) {
+            $.each(result, function (key, value) {
+                $("#DistrictNum_mobile").append("<option value='" + value.DistrictNum + "'>" + value.Name + "</option>");
+            });
+        });
+    });
+
+    function teklifButonList(id) {
+        $("#UserId").val(id);
+
+        $('#teklif-dialog').modal("show");
+        $("#teklif-dialog").appendTo("body");
+    }
+
+    $('#TeklifForm').on('submit', function (e) {
+        e.preventDefault();
+        var form = $('#TeklifForm')[0];
+        var data = new FormData(form);
+
+        $.ajax({
+            url: '/Companies/OneriTeklif',
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (result) {
+                if (result.isSuccess) {
+                    Swal.fire(
+                        'Fiyat Teklifi Al',
+                        result.message,
+                        'success'
+                    )
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
+                }
+                else {
+                    Swal.fire(
+                        'Fiyat Teklifi Al',
+                        result.message,
+                        'danger'
+                    )
+                }
+            }
+        })
+    });
+</script>
+
+<script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            //alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    function showPosition(position) {
+        $("#filterModel_currentLocation_latitude").val(position.coords.latitude);
+        $("#filterModel_currentLocation_longitude").val(position.coords.longitude);
+        $("#distance_div").show();
+    }
+    getLocation();
+</script>
+

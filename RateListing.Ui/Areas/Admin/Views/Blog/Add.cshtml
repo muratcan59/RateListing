@@ -1,0 +1,140 @@
+﻿@model RateListing.Model.Blog
+
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+<script src="~/Scripts/ckeditor/config.js"></script>
+<script src="~/CKFinderScripts/ckfinder.js"></script>
+<link href="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+<script src="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Haberler ve Etkinlikler</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/Admin/Home/Index">Anasayfa</a></li>
+                        <li class="breadcrumb-item active">Haber / Etkinlik Ekle</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Haber / Etkinlik Ekle</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        @using (Html.BeginForm("Add", "Blog", FormMethod.Post, new { enctype = "multipart/form-data", id = "blogForm" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-horizontal">
+                                @*<h4>Blog</h4>
+                                    <hr />*@
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-12">Adı</label>
+                                    <div class="col-md-12">
+                                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-12">Resim</label>
+                                    <div class="col-md-12">
+                                        <input type="file" name="foto" id="Picture" required />
+                                        @Html.ValidationMessageFor(model => model.Picture, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-12">Özet</label>
+                                    <div class="col-md-12">
+                                        @Html.TextAreaFor(model => model.Summary, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Summary, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-12">Açıklama</label>
+                                    <div class="col-md-12">
+                                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <button type="submit" class="btn btn-primary">Ekle</button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    var description = CKEDITOR.replace('Description');
+    CKFinder.setupCKEditor(description);
+</script>
+<script>
+    var description = CKEDITOR.replace('Summary');
+    CKFinder.setupCKEditor(description);
+</script>
+<script src="~/Areas/Admin/AdminLTE-master/plugins/jquery/jquery.min.js"></script>
+<script>
+    $('#blogForm').on('submit', function (e) {
+        e.preventDefault();
+        var form = $('#blogForm')[0];
+        var data = new FormData(form);
+        data.set('Description', CKEDITOR.instances['Description'].getData());
+        data.set('Summary', CKEDITOR.instances['Summary'].getData());
+        $.ajax({
+            url: '/Admin/Blog/Add',
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (result) {
+                if (result.isSuccess) {
+                    Swal.fire(
+                        'Haber / Etkinlik Ekleme',
+                        result.message,
+                        'success'
+                    )
+                    setTimeout(function () {
+                        window.location.href = "/Admin/Blog/List";
+                    }, 2000);
+                }
+                else {
+                    Swal.fire(
+                        'Haber / Etkinlik Ekleme',
+                        result.message,
+                        'danger'
+                    )
+                }
+            }
+        })
+    });
+</script>

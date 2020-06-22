@@ -1,0 +1,953 @@
+﻿@using RateListing.Model
+@using RateListing.Bll.Helpers
+
+@model User
+
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var firmalar = RateListing.Bll.bUser.GetAll();
+    var urunlerhizmetler = RateListing.Bll.bProductService.GetAll(Model.Id);
+    var kategoriad = RateListing.Bll.bCategory.GetById(Model.CategoryId.Value);
+    var firmail = new RateListing.Model.City();
+    if (Model.CityNum != null)
+    {
+        firmail = RateListing.Bll.bCity.GetById(Model.CityNum.Value);
+    }
+    var firmailce = new RateListing.Model.District();
+    if (Model.DistrictNum != null)
+    {
+        firmailce = RateListing.Bll.bDistrict.GetById(Model.DistrictNum.Value);
+    }
+    var yorumlar = RateListing.Bll.bComment.GetApproveComments(Model.Id);
+    var sikayetler = RateListing.Bll.bComplaint.GetAll(Model.Id).Where(w => w.IsApprove).ToList();
+    var referanslar = RateListing.Bll.bComplaint.GetAllReference(Model.Id).Where(w => w.IsApprove).ToList();
+    var ortalama = RateListing.Bll.bComment.ScoreAvg(Model.Id);
+    var resimler = RateListing.Bll.bPhoto.GetAll(Model.Id);
+    var calismaSaatleri = RateListing.Bll.bTime.GetAll(Model.Id);
+}
+<link href="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+<script src="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<style>
+    @@media (max-width: 991px) {
+
+        main {
+            top: 60px;
+        }
+    }
+</style>
+<header class="header_in">@Html.Partial("Menu/Other")</header>
+
+<main>
+    @* @if (resimler.Count != 0)
+        {
+            <style>
+                .hero_in.hotels_detail:before {
+                    background-image: url("/Uploads/User/@Model.Id/Gallery/@resimler.FirstOrDefault().Picture") !important;
+                    height: 100% !important;
+                    -webkit-background-size: cover;
+                    -moz-background-size: cover;
+                    -o-background-size: cover;
+                    background-size: cover;
+                }
+            </style>
+            <div class="hero_in hotels_detail">
+                <div class="wrapper">
+                    <span class="magnific-gallery">
+                        <a href="~/Uploads/User/@Model.Id/Gallery/@resimler.FirstOrDefault().Picture" class="btn_photos" data-effect="mfp-zoom-in">Tüm Resimler</a>
+                        @foreach (var item in resimler)
+                        {
+                            if (item != resimler.FirstOrDefault())
+                            {
+                                <a href="~/Uploads/User/@Model.Id/Gallery/@item.Picture" data-effect="mfp-zoom-in"></a>
+                            }
+                        }
+                    </span>
+                </div>
+            </div>
+            <!--/hero_in-->
+        }*@
+    <nav class="secondary_nav sticky_horizontal_2">
+        <div class="container">
+            <ul class="clearfix">
+                <li><a href="#kurumsalbilgi">Kurumsal Bilgiler</a></li>
+                <li><a href="#urunhizmet">Ürün Ve Hizmetler</a></li>
+                <li><a href="#galeri">Galeri</a></li>
+                <li><a href="#location">Lokasyon</a></li>
+                <li><a href="#reviews">Yorumlar</a></li>
+                <li><a href="#0">Yorumlar</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container margin_60_35">
+        <div class="row">
+            <aside class="col-lg-4 sidebar_mobile" id="sidebar">
+                @Html.Partial("_detailContactInfo", Model)
+            </aside>
+
+            <div class="col-lg-8">
+                <section id="description">
+                    <div class="detail_title_1">
+                        <h1>@Model.Name</h1>
+                        @*<a class="address mt-3" href="https://www.google.com/maps/place/@Model.Address">@Model.Address</a>*@
+                        <a class="mt-3">@Model.Slogan</a>
+                    </div>
+
+                    @*@Html.Raw(@Model.Description)*@
+
+                    <hr />
+                    <h5 id="kurumsalbilgi" class="add_bottom_15">Kurumsal Bilgiler</h5>
+                    <table class="table table-striped add_bottom_45">
+                        <tbody>
+                            @if (!string.IsNullOrEmpty(Model.TaxPlace))
+                            {
+                                <tr>
+                                    <td>Vergi Dairesi</td>
+                                    <td>@Model.TaxPlace</td>
+                                </tr>
+                            }
+
+                            @if (Model.TaxNo != 0)
+                            {
+                                <tr>
+                                    <td>Vergi No</td>
+                                    <td>@Model.TaxNo</td>
+                                </tr>
+                            }
+
+                            @if (Model.FoundationYear != 0)
+                            {
+                                <tr>
+                                    <td>Kuruluş Yılı</td>
+                                    <td>@Model.FoundationYear</td>
+                                </tr>
+                            }
+
+                            @if (Model.CreditScore != 0)
+                            {
+                                <tr>
+                                    <td>Kredi Skoru</td>
+                                    <td>@Model.CreditScore</td>
+                                </tr>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.RegisteredRoom))
+                            {
+                                <tr>
+                                    <td>Kayıtlı Odalar</td>
+                                    <td>@Model.RegisteredRoom</td>
+                                </tr>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.RegisteredFederation))
+                            {
+                                <tr>
+                                    <td>Kayıtlı Federasyonlar</td>
+                                    <td>@Model.RegisteredFederation</td>
+                                </tr>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.LicenceDocument))
+                            {
+                                <tr>
+                                    <td>Lisans - Belge</td>
+                                    <td>@Model.LicenceDocument</td>
+                                </tr>
+                            }
+
+                            @if (Model.NumOfEmployees != 0)
+                            {
+                                <tr>
+                                    <td>Çalışan Kişi Sayısı</td>
+                                    <td>@Model.NumOfEmployees</td>
+                                </tr>
+                            }
+
+                            @if (!string.IsNullOrEmpty(kategoriad.Name))
+                            {
+                                <tr>
+                                    <td>Sektör</td>
+                                    <td>@kategoriad.Name</td>
+                                </tr>
+                            }
+
+                            @*@if (!string.IsNullOrEmpty(Model.ServiceDefinition))
+                                {
+                                    <tr>
+                                        <td>Ürün/Hizmet Tanımı</td>
+                                        <td>@Model.ServiceDefinition</td>
+                                    </tr>
+                                }*@
+
+                            @if (Model.CompanyType != 0)
+                            {
+                                <tr>
+                                    <td>Şirket Tipi</td>
+                                    <td>@RateListing.Bll.Helpers.EnumHelper.GetCompanyTypeName(Model.CompanyType)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <hr />
+
+                    @if (!string.IsNullOrEmpty(Model.SalientFeature1 + Model.SalientFeature2 + Model.SalientFeature3))
+                    {
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="add_bottom_15">Kategoriler</h5>
+                                <table class="table table-striped add_bottom_45">
+                                    <tbody>
+                                        @if (Model.CategoryId != null)
+                                        {
+                                            var category = RateListing.Bll.bCategory.GetById(Model.CategoryId.Value);
+                                            <tr>
+                                                <td>@category.Name</td>
+                                            </tr>
+                                        }
+                                        @if (Model.Category2Id != null)
+                                        {
+                                            var category = RateListing.Bll.bCategory.GetById(Model.Category2Id.Value);
+                                            <tr>
+                                                <td>@category.Name</td>
+                                            </tr>
+                                        }
+                                        @if (Model.Category3Id != null)
+                                        {
+                                            var category = RateListing.Bll.bCategory.GetById(Model.Category3Id.Value);
+                                            <tr>
+                                                <td>@category.Name</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="add_bottom_15">Belirgin Özelliklerimiz</h5>
+                                <table class="table table-striped add_bottom_45">
+                                    <tbody>
+                                        @if (!string.IsNullOrEmpty(Model.SalientFeature1))
+                                        {
+                                            <tr>
+                                                <td>@Model.SalientFeature1</td>
+                                            </tr>
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.SalientFeature2))
+                                        {
+                                            <tr>
+                                                <td>@Model.SalientFeature2</td>
+                                            </tr>
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.SalientFeature3))
+                                        {
+                                            <tr>
+                                                <td>@Model.SalientFeature3</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <hr />
+                    }
+
+                    @if (calismaSaatleri.Any())
+                    {
+                        var pazartesi = calismaSaatleri.FirstOrDefault(w => w.Day == Enums.Gunler.Pazartesi);
+                        var salı = calismaSaatleri.FirstOrDefault(w => w.Day == Enums.Gunler.Salı);
+                        var çarşamba = calismaSaatleri.FirstOrDefault(w => w.Day == Enums.Gunler.Çarşamba);
+                        var perşembe = calismaSaatleri.FirstOrDefault(w => w.Day == Enums.Gunler.Perşembe);
+                        var cuma = calismaSaatleri.FirstOrDefault(w => w.Day == Enums.Gunler.Cuma);
+                        var cumartesi = calismaSaatleri.FirstOrDefault(w => w.Day == Enums.Gunler.Cumartesi);
+                        var pazar = calismaSaatleri.FirstOrDefault(w => w.Day == Enums.Gunler.Pazar);
+
+                        var isOpenNow = RateListing.Bll.bUser.isOpenNow(Model.Id);
+
+                        <div class="row">
+                            <div class="col-md-6 mt-2">
+                                <div class="opening">
+                                    <div class="ribbon">
+                                        @if (isOpenNow)
+                                        {
+                                            <span class="open">Şuan Açık</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="closed">Kapalı</span>
+                                        }
+                                    </div>
+                                    <i class="icon_clock_alt"></i>
+                                    <h4>Çalışma Saatleri</h4>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <ul>
+
+                                                @if (!string.IsNullOrEmpty(pazartesi.OpenTime) && !string.IsNullOrEmpty(pazartesi.CloseTime) && pazartesi.OpenTime != "Kapalı" && pazartesi.CloseTime != "Kapalı")
+                                                {
+                                                    <li>Pazartesi <span>@Tool.stringToTimeFormat(pazartesi.OpenTime) - @Tool.stringToTimeFormat(pazartesi.CloseTime)</span></li>
+                                                }
+                                                else
+                                                {
+                                                    <li>Pazartesi <span>Kapalı</span></li>
+                                                }
+
+                                                @if (!string.IsNullOrEmpty(salı.OpenTime) && !string.IsNullOrEmpty(salı.CloseTime) && salı.OpenTime != "Kapalı" && salı.CloseTime != "Kapalı")
+                                                {
+                                                    <li>Salı <span>@Tool.stringToTimeFormat(salı.OpenTime) - @Tool.stringToTimeFormat(salı.CloseTime)</span></li>
+                                                }
+                                                else
+                                                {
+                                                    <li>Salı <span>Kapalı</span></li>
+                                                }
+
+                                                @if (!string.IsNullOrEmpty(çarşamba.OpenTime) && !string.IsNullOrEmpty(çarşamba.CloseTime) && çarşamba.OpenTime != "Kapalı" && çarşamba.CloseTime != "Kapalı")
+                                                {
+                                                    <li>Çarşamba <span>@Tool.stringToTimeFormat(çarşamba.OpenTime) - @Tool.stringToTimeFormat(çarşamba.CloseTime)</span></li>
+                                                }
+                                                else
+                                                {
+                                                    <li>Çarşamba <span>Kapalı</span></li>
+                                                }
+
+                                                @if (!string.IsNullOrEmpty(perşembe.OpenTime) && !string.IsNullOrEmpty(perşembe.CloseTime) && perşembe.OpenTime != "Kapalı" && perşembe.CloseTime != "Kapalı")
+                                                {
+                                                    <li>Perşembe <span>@Tool.stringToTimeFormat(perşembe.OpenTime) - @Tool.stringToTimeFormat(perşembe.CloseTime)</span></li>
+                                                }
+                                                else
+                                                {
+                                                    <li>Perşembe <span>Kapalı</span></li>
+                                                }
+
+                                                @if (!string.IsNullOrEmpty(cuma.OpenTime) && !string.IsNullOrEmpty(cuma.CloseTime) && cuma.OpenTime != "Kapalı" && cuma.CloseTime != "Kapalı")
+                                                {
+                                                    <li>Cuma <span>@Tool.stringToTimeFormat(cuma.OpenTime) - @Tool.stringToTimeFormat(cuma.CloseTime)</span></li>
+                                                }
+                                                else
+                                                {
+                                                    <li>Cuma <span>Kapalı</span></li>
+                                                }
+
+                                                @if (!string.IsNullOrEmpty(cumartesi.OpenTime) && !string.IsNullOrEmpty(cumartesi.CloseTime) && cumartesi.OpenTime != "Kapalı" && cumartesi.CloseTime != "Kapalı")
+                                                {
+                                                    <li>Cumartesi <span>@Tool.stringToTimeFormat(cumartesi.OpenTime) - @Tool.stringToTimeFormat(cumartesi.CloseTime)</span></li>
+                                                }
+                                                else
+                                                {
+                                                    <li>Cumartesi <span>Kapalı</span></li>
+                                                }
+
+                                                @if (!string.IsNullOrEmpty(pazar.OpenTime) && !string.IsNullOrEmpty(pazar.CloseTime) && pazar.OpenTime != "Kapalı" && pazar.CloseTime != "Kapalı")
+                                                {
+                                                    <li>Pazar <span>@Tool.stringToTimeFormat(pazar.OpenTime) - @Tool.stringToTimeFormat(pazar.CloseTime)</span></li>
+                                                }
+                                                else
+                                                {
+                                                    <li>Pazar <span>Kapalı</span></li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <div class="opening" style="height: 100%;">
+                                    @*<div class="ribbon">
+                                            @if (isOpenNow)
+                                            {
+                                                <span class="open">Şuan Açık</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="closed">Kapalı</span>
+                                            }
+                                        </div>*@
+                                    <i class="icon-money-1"></i>
+                                    <h4>Ödeme Yöntemleri</h4>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <ul>
+                                                @foreach (var item in Model.PaymentMethods.Split(',').ToList())
+                                                {
+                                                    <li>@item</li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                    }
+
+                    @if (urunlerhizmetler.Count != 0)
+                    {
+                        <h3 id="urunhizmet">Ürünler ve Hizmetler</h3>
+                        foreach (var item in urunlerhizmetler)
+                        {
+                            <div class="room_type first">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <img src="/Uploads/User/@Model.Id/ProductService/@item.Picture" class="img-fluid" alt="">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h4>@item.Name</h4>
+                                        <p>@Html.Raw(item.Description)</p>
+                                    </div>
+                                </div>
+                                <!-- /row -->
+                            </div>
+                            <!-- /rom_type -->
+                        }
+                        <hr />
+                    }
+
+
+                    @if (resimler.Count != 0)
+                    {
+                        <h3 id="galeri">Galeri</h3>
+                        <div class="grid-gallery mt-3">
+                            <ul class="magnific-gallery">
+                                @foreach (var item in resimler.OrderBy(w => w.OrderNo))
+                                {
+                                    <li>
+                                        <figure>
+                                            <img src="~/Uploads/User/@Model.Id/Gallery/@item.Picture?width=300&height=200&bgcolor=fff" alt="@Model.Name">
+                                            <figcaption>
+                                                <div class="caption-content">
+                                                    <a href="~/Uploads/User/@Model.Id/Gallery/@item.Picture" title="@Model.Name" data-effect="mfp-zoom-in">
+                                                        <i class="pe-7s-albums"></i>
+                                                        <p style="font-size:10px;">@Model.Name</p>
+                                                    </a>
+                                                </div>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <hr />
+                        <!-- /grid gallery -->
+                    }
+
+                    @*@if (false)
+                        {
+                            <h3 id="location">Lokasyon</h3>
+                            <div class="map map_single add_bottom_45">@Html.Raw(Model.Location)</div>
+                            <!-- End Map -->
+                            <script>
+                                document.querySelector("#description > div.map.map_single > iframe").width = '100%';
+                            </script>
+                        }
+                    *@
+
+                    @if (!string.IsNullOrEmpty(Model.Latitude) && !string.IsNullOrEmpty(Model.Longitude))
+                    {
+                        <h3 id="location">Lokasyon</h3>
+                        <div id="map" class="map map_single add_bottom_45"></div>
+                    }
+
+                </section>
+                <!-- /section -->
+                <style>
+                    .nav-item {
+                        width: 50%;
+                    }
+                </style>
+                <ul class="nav nav-tabs mb-1 text-center" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true"><b>Referanslar</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false"><b>Şikayetler</b></a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                        @if (referanslar.Count != 0)
+                        {
+                            <section id="reviews">
+                                <br />
+                                <div class="reviews-container">
+                                    @foreach (var item in referanslar)
+                                    {
+                                        <div class="review-box clearfix">
+                                            <div class="rev-content">
+                                                <div class="rating">
+                                                    @switch (item.Score)
+                                                    {
+                                                        case 1:
+                                                            <i style="color:#ffc107" class="icon-star"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i>
+                                                            break;
+                                                        case 2:
+                                                            <i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i>
+                                                            break;
+                                                        case 3:
+                                                            <i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i>
+                                                            break;
+                                                        case 4:
+                                                            <i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i class="icon-star-empty"></i>
+                                                            break;
+                                                        case 5:
+                                                            <i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i>
+                                                            break;
+                                                        default:
+                                                            <i class="icon-star-empty"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i>
+                                                            break;
+                                                    }
+                                                </div>
+                                                <div class="rev-info">
+                                                    @item.NameSurname – @item.CreateDate.Value.ToShortDateString():
+                                                </div>
+                                                <div class="rev-text">
+                                                    <p>
+                                                        @item.Answer
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /review-box -->
+                                    }
+                                </div>
+                                <!-- /review-container -->
+                            </section>
+                            <!-- /section -->
+                        }
+                    </div>
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                        @if (sikayetler.Count != 0)
+                        {
+                            <section id="reviews">
+                                <br />
+                                <div class="reviews-container">
+                                    @foreach (var item in sikayetler)
+                                    {
+                                        <div class="review-box clearfix">
+                                            <div class="rev-content">
+                                                <div class="rating">
+                                                    @switch (item.Score)
+                                                    {
+                                                        case 1:
+                                                            <i style="color:#ffc107" class="icon-star"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i>
+                                                            break;
+                                                        case 2:
+                                                            <i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i>
+                                                            break;
+                                                        case 3:
+                                                            <i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i>
+                                                            break;
+                                                        case 4:
+                                                            <i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i class="icon-star-empty"></i>
+                                                            break;
+                                                        case 5:
+                                                            <i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i><i style="color:#ffc107" class="icon-star"></i>
+                                                            break;
+                                                        default:
+                                                            <i class="icon-star-empty"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i>
+                                                            break;
+
+                                                    }
+                                                    @if (item.IsSolve)
+                                                    {
+                                                        <span class="float-right text-success">Çözüldü</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="float-right text-danger">Çözülmedi</span>
+                                                    }
+                                                </div>
+                                                <div class="rev-info">
+                                                    @item.NameSurname – @item.CreateDate.Value.ToShortDateString():
+                                                </div>
+                                                <div class="rev-text">
+                                                    <p>
+                                                        @item.Answer
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /review-box -->
+                                    }
+                                </div>
+                                <!-- /review-container -->
+                            </section>
+                            <!-- /section -->
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <aside class="col-lg-4 sidebar_desktop" id="sidebar">
+                @Html.Partial("_detailContactInfo", Model)
+            </aside>
+
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+
+</main>
+<!--/main-->
+<div class="modal fade" id="yorum-dialog" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div><img style="float:left;" src="~/sparker/html/img/logo.png" width="165" height="35" alt="" class="logo_sticky"></div>
+                <h5 style="margin-left:30px;" class="modal-title">Yorum Yap</h5>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="YorumForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Ad - Soyad:</label>
+                        <input type="text" name="NameSurname" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">E-Mail:</label>
+                        <input type="text" name="Email" class="form-control" pattern="[a-z0-9._%+-]+@("@")[a-z0-9.-]+\.[a-z]{2,63}$" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Telefon No:</label>
+                        <input type="text" name="Phone" onkeypress="return onlyNumberKey(event)" pattern="[0-9]{10}" title="10 Haneli ve Boşluksuz Olacak Şekilde Giriniz." class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Puanlama </label>
+                        <div>
+                            <select name="Score" class="form-control">
+                                <option value="1">1 (en düşük)</option>
+                                <option value="2">2</option>
+                                <option value="3" selected>3</option>
+                                <option value="4">4</option>
+                                <option value="5">5 (en yüksek)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Mesajınız:</label>
+                        <textarea class="form-control" name="Description" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Mesajı Gönder</button>
+                </div>
+                @Html.HiddenFor(x => x.Id)
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="sikayet-dialog" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div><img style="float:left;" src="~/sparker/html/img/logo.png" width="165" height="35" alt="" class="logo_sticky"></div>
+                <h5 style="margin-left:30px;" class="modal-title">Şikayet Et</h5>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="SikayetForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Ad - Soyad:</label>
+                        <input type="text" name="NameSurname" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">E-Mail:</label>
+                        <input type="text" name="Email" class="form-control" pattern="[a-z0-9._%+-]+@("@")[a-z0-9.-]+\.[a-z]{2,63}$" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Telefon No:</label>
+                        <input type="text" name="Phone" onkeypress="return onlyNumberKey(event)" pattern="[0-9]{10}" title="10 Haneli ve Boşluksuz Olacak Şekilde Giriniz." class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Puanlama </label>
+                        <div>
+                            <select name="Score" class="form-control">
+                                <option value="1">1 (en düşük)</option>
+                                <option value="2">2</option>
+                                <option value="3" selected>3</option>
+                                <option value="4">4</option>
+                                <option value="5">5 (en yüksek)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Mesajınız:</label>
+                        <textarea class="form-control" name="Answer" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Mesajı Gönder</button>
+                </div>
+                @Html.Hidden("UserId", Model.Id)
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="teklif-dialog" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div><img style="float:left;" src="~/sparker/html/img/logo.png" width="165" height="35" alt="" class="logo_sticky"></div>
+                <h5 style="margin-left:30px;" class="modal-title">Fiyat Teklifi Al</h5>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="TeklifForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Ad - Soyad:</label>
+                        <input type="text" name="NameSurname" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">E-Mail:</label>
+                        <input type="text" name="Email" class="form-control" pattern="[a-z0-9._%+-]+@("@")[a-z0-9.-]+\.[a-z]{2,63}$" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Telefon No:</label>
+                        <input type="text" name="Phone" onkeypress="return onlyNumberKey(event)" pattern="[0-9]{10}" title="10 Haneli ve Boşluksuz Olacak Şekilde Giriniz." class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Mesajınız:</label>
+                        <textarea class="form-control" name="Description" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Mesajı Gönder</button>
+                </div>
+                @Html.Hidden("UserId", Model.Id)
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="referans-dialog" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div><img style="float:left;" src="~/sparker/html/img/logo.png" width="165" height="35" alt="" class="logo_sticky"></div>
+                <h5 style="margin-left:30px;" class="modal-title">Referans Ver</h5>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+
+            <form id="ReferansForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Ad - Soyad:</label>
+                        <input type="text" name="NameSurname" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">E-Mail:</label>
+                        <input type="text" name="Email" class="form-control" pattern="[a-z0-9._%+-]+@("@")[a-z0-9.-]+\.[a-z]{2,63}$" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Telefon No:</label>
+                        <input type="text" name="Phone" onkeypress="return onlyNumberKey(event)" pattern="[0-9]{10}" title="10 Haneli ve Boşluksuz Olacak Şekilde Giriniz." class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Puanlama </label>
+                        <div>
+                            <select name="Score" class="form-control">
+                                <option value="1">1 (en düşük)</option>
+                                <option value="2">2</option>
+                                <option value="3" selected>3</option>
+                                <option value="4">4</option>
+                                <option value="5">5 (en yüksek)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Mesajınız:</label>
+                        <textarea class="form-control" name="Answer" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Mesajı Gönder</button>
+                </div>
+                @Html.Hidden("UserId", Model.Id)
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/sparker/html/coming_soon/js/jquery-2.2.4.min.js"></script>
+<!-- Map -->
+@Html.Partial("_mapSingle", Model)
+<script>
+    var x = window.matchMedia("(max-width: 991px)")
+    if (x.matches) { // If media query matches
+        $(".sidebar_desktop").remove();
+    } else {
+        $(".sidebar_mobile").remove();
+    }
+
+    function onlyNumberKey(evt) {
+
+        // Only ASCII charactar in that range allowed
+        var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+        if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+            return false;
+        return true;
+    }
+</script>
+<script>
+    $('#YorumForm').on('submit', function (e) {
+        e.preventDefault();
+        var form = $('#YorumForm')[0];
+        var data = new FormData(form);
+
+        $.ajax({
+            url: '/Companies/YorumYap',
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (result) {
+                if (result.isSuccess) {
+                    Swal.fire(
+                        'Yorum Yap',
+                        result.message,
+                        'success'
+                    )
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
+                }
+                else {
+                    Swal.fire(
+                        'Yorum Yap',
+                        result.message,
+                        'danger'
+                    )
+                }
+            }
+        })
+    });
+</script>
+<script>
+    $('#SikayetForm').on('submit', function (e) {
+        e.preventDefault();
+        var form = $('#SikayetForm')[0];
+        var data = new FormData(form);
+
+        $.ajax({
+            url: '/Companies/SikayetEt',
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (result) {
+                if (result.isSuccess) {
+                    Swal.fire(
+                        'Şikayet Et',
+                        result.message,
+                        'success'
+                    )
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
+                }
+                else {
+                    Swal.fire(
+                        'Şikayet Et',
+                        result.message,
+                        'danger'
+                    )
+                }
+            }
+        })
+    });
+</script>
+<script>
+    $('#ReferansForm').on('submit', function (e) {
+        e.preventDefault();
+        var form = $('#ReferansForm')[0];
+        var data = new FormData(form);
+
+        $.ajax({
+            url: '/Companies/ReferansVer',
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (result) {
+                if (result.isSuccess) {
+                    Swal.fire(
+                        'Referans Ver',
+                        result.message,
+                        'success'
+                    )
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
+                }
+                else {
+                    Swal.fire(
+                        'Referans Ver',
+                        result.message,
+                        'danger'
+                    )
+                }
+            }
+        })
+    });
+</script>
+<script>
+    $('#TeklifForm').on('submit', function (e) {
+        e.preventDefault();
+        var form = $('#TeklifForm')[0];
+        var data = new FormData(form);
+
+        $.ajax({
+            url: '/Companies/OneriTeklif',
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (result) {
+                if (result.isSuccess) {
+                    Swal.fire(
+                        'Fiyat Teklifi Al',
+                        result.message,
+                        'success'
+                    )
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
+                }
+                else {
+                    Swal.fire(
+                        'Fiyat Teklifi Al',
+                        result.message,
+                        'danger'
+                    )
+                }
+            }
+        })
+    });
+</script>

@@ -1,0 +1,492 @@
+﻿@using RateListing.Model
+@model RateListing.Ui.Areas.Company.Model.UserProfileModel
+
+
+@{
+    ViewBag.Title = "Profilim";
+    Layout = "~/Areas/Company/Views/Shared/_UserLayout.cshtml";
+    var iller = RateListing.Bll.bCity.GetAll();
+    var ilceler = new List<District>();
+    if (Model.user.CityNum != null)
+    {
+        ilceler = RateListing.Bll.bCity.GetDistricts(Model.user.CityNum.Value);
+    }
+
+    var booleanSelectListItems = RateListing.Bll.Helpers.Tool.getBooleanSelectList();
+
+    var staticTimeList = RateListing.Bll.Helpers.Tool.getStaticTimeList();
+
+    var Pazartesi = Model.times.FirstOrDefault(w => w.Day == Enums.Gunler.Pazartesi);
+    var PazartesiOpenValue = Pazartesi != null ? Pazartesi.OpenTime : null;
+    var PazartesiCloseValue = Pazartesi != null ? Pazartesi.CloseTime : null;
+
+    var Salı = Model.times.FirstOrDefault(w => w.Day == Enums.Gunler.Salı);
+    var SalıOpenValue = Salı != null ? Salı.OpenTime : null;
+    var SalıCloseValue = Salı != null ? Salı.CloseTime : null;
+
+    var Çarşamba = Model.times.FirstOrDefault(w => w.Day == Enums.Gunler.Çarşamba);
+    var ÇarşambaOpenValue = Çarşamba != null ? Çarşamba.OpenTime : null;
+    var ÇarşambaCloseValue = Çarşamba != null ? Çarşamba.CloseTime : null;
+
+    var Perşembe = Model.times.FirstOrDefault(w => w.Day == Enums.Gunler.Perşembe);
+    var PerşembeOpenValue = Perşembe != null ? Perşembe.OpenTime : null;
+    var PerşembeCloseValue = Perşembe != null ? Perşembe.CloseTime : null;
+
+    var Cuma = Model.times.FirstOrDefault(w => w.Day == Enums.Gunler.Cuma);
+    var CumaOpenValue = Cuma != null ? Cuma.OpenTime : null;
+    var CumaCloseValue = Cuma != null ? Cuma.CloseTime : null;
+
+    var Cumartesi = Model.times.FirstOrDefault(w => w.Day == Enums.Gunler.Cumartesi);
+    var CumartesiOpenValue = Cumartesi != null ? Cumartesi.OpenTime : null;
+    var CumartesiCloseValue = Cumartesi != null ? Cumartesi.CloseTime : null;
+
+    var Pazar = Model.times.FirstOrDefault(w => w.Day == Enums.Gunler.Pazar);
+    var PazarOpenValue = Pazar != null ? Pazar.OpenTime : null;
+    var PazarCloseValue = Pazar != null ? Pazar.CloseTime : null;
+}
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+<script src="~/Scripts/ckeditor/config.js"></script>
+<script src="~/CKFinderScripts/ckfinder.js"></script>
+<link href="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+<script src="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+
+@using (Html.BeginForm("UserProfile", "Dashboard", FormMethod.Post, new { enctype = "multipart/form-data", id = "ProfilForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.user.Id)
+    <div class="container-fluid">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#">Anasayfa</a>
+            </li>
+            <li class="breadcrumb-item active">Profilim</li>
+        </ol>
+        <div class="box_general padding_bottom">
+            <div class="header_box version_2">
+                <h2><i class="fa fa-user"></i>İletişim Bilgileri</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-12 add_top_30">
+
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Firma Adı</label>
+                                @Html.EditorFor(x => x.user.Name, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Yetkili Kişi</label>
+                                @Html.EditorFor(x => x.user.AuthorizedPerson, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Slogan</label>
+                                @Html.EditorFor(x => x.user.Slogan, new { htmlAttributes = new { @class = "form-control", maxlength = 200 } })
+                            </div>
+                        </div>
+                        @*<div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Açıklama</label>
+                                    @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>*@
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Telefon</label>
+                                @Html.EditorFor(x => x.user.PhoneNumber, new { htmlAttributes = new { @class = "form-control", @onkeypress = "return onlyNumberKey(event)" } })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Alternatif Telefon</label>
+                                @Html.EditorFor(x => x.user.AlternativePhone, new { htmlAttributes = new { @class = "form-control", @onkeypress = "return onlyNumberKey(event)" } })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Email</label>
+                                @Html.EditorFor(x => x.user.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Web Adres</label>
+                                @Html.EditorFor(x => x.user.WebUrl, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>İl</label>
+                                @Html.DropDownListFor(model => model.user.CityNum, new SelectList(iller, "CityNum", "Name", Model.user.CityNum), "İl Seçin", htmlAttributes: new { @class = "form-control CityId" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>İlçe</label>
+                                @Html.DropDownListFor(model => model.user.DistrictNum, new SelectList(ilceler, "DistrictNum", "Name", Model.user.DistrictNum), "İlçe Seçin", htmlAttributes: new { @class = "form-control DistrictId" })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Açık Adres</label>
+                                @Html.TextAreaFor(x => x.user.Address, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        @*<div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Enlem(Latitude)</label>
+                                        @Html.TextBoxFor(model => model.Latitude, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Boylam(Longitude)</label>
+                                        @Html.TextBoxFor(model => model.Longitude, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            <div class="col-md-4">
+
+                                <a href="javascript:void(0)" onclick="getLatLong()" class="btn btn-info mt-4">Koordinatları Adresten Getir</a>
+                            </div>
+                                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Lokasyon [Google Yerleştirme Kodu(iframe)]</label>
+                                    @Html.TextBoxFor(model => model.Location, new { @class = "form-control" })
+                                </div>
+                            </div>*@
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Facebook</label>
+                                @Html.EditorFor(x => x.user.FacebookUrl, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Twitter</label>
+                                @Html.EditorFor(x => x.user.TwitterUrl, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Instagram</label>
+                                @Html.EditorFor(x => x.user.InstagramUrl, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        @*<div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Firma Satılık mı?</label>
+                                    @Html.DropDownListFor(model => model.IsSale, new SelectList(booleanSelectListItems, "Value", "Text", Model.BonusFeature), new { @class = "form-control" })
+                                </div>
+                            </div>*@
+                    </div>
+
+                    <p><button type="submit" class="btn_1 medium">Kaydet</button></p>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="box_general padding_bottom">
+            <div class="header_box version_2">
+                <h2><i class="fa fa-clock-o"></i>Çalışma Saatleri</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">Pazartesi</label>
+                    @Html.Hidden("times[0].UserId", Model.user.Id)
+                    @Html.Hidden("times[0].Day", RateListing.Model.Enums.Gunler.Pazartesi)
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("times[0].OpenTime", new SelectList(staticTimeList, "Value", "Text", PazartesiOpenValue), "Açılış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("times[0].CloseTime", new SelectList(staticTimeList, "Value", "Text", PazartesiCloseValue), "Kapanış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">Salı</label>
+                    @Html.Hidden("times[1].UserId", Model.user.Id)
+                    @Html.Hidden("times[1].Day", RateListing.Model.Enums.Gunler.Salı)
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("times[1].OpenTime", new SelectList(staticTimeList, "Value", "Text", SalıOpenValue), "Açılış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("times[1].CloseTime", new SelectList(staticTimeList, "Value", "Text", SalıCloseValue), "Kapanış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">Çarşamba</label>
+                    @Html.Hidden("times[2].UserId", Model.user.Id)
+                    @Html.Hidden("times[2].Day", RateListing.Model.Enums.Gunler.Çarşamba)
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("times[2].OpenTime", new SelectList(staticTimeList, "Value", "Text", ÇarşambaOpenValue), "Açılış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("times[2].CloseTime", new SelectList(staticTimeList, "Value", "Text", ÇarşambaCloseValue), "Kapanış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">Perşembe</label>
+                    @Html.Hidden("times[3].UserId", Model.user.Id)
+                    @Html.Hidden("times[3].Day", RateListing.Model.Enums.Gunler.Perşembe)
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("times[3].OpenTime", new SelectList(staticTimeList, "Value", "Text", PerşembeOpenValue), "Açılış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("times[3].CloseTime", new SelectList(staticTimeList, "Value", "Text", PerşembeCloseValue), "Kapanış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">Cuma</label>
+                    @Html.Hidden("times[4].UserId", Model.user.Id)
+                    @Html.Hidden("times[4].Day", RateListing.Model.Enums.Gunler.Cuma)
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("times[4].OpenTime", new SelectList(staticTimeList, "Value", "Text", CumaOpenValue), "Açılış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("times[4].CloseTime", new SelectList(staticTimeList, "Value", "Text", CumaCloseValue), "Kapanış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">Cumartesi</label>
+                    @Html.Hidden("times[5].UserId", Model.user.Id)
+                    @Html.Hidden("times[5].Day", RateListing.Model.Enums.Gunler.Cumartesi)
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("times[5].OpenTime", new SelectList(staticTimeList, "Value", "Text", CumartesiOpenValue), "Açılış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("times[5].CloseTime", new SelectList(staticTimeList, "Value", "Text", CumartesiCloseValue), "Kapanış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">Pazar</label>
+                    @Html.Hidden("times[6].UserId", Model.user.Id)
+                    @Html.Hidden("times[6].Day", RateListing.Model.Enums.Gunler.Pazar)
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("times[6].OpenTime", new SelectList(staticTimeList, "Value", "Text", PazarOpenValue), "Açılış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            @Html.DropDownList("times[6].CloseTime", new SelectList(staticTimeList, "Value", "Text", PazarCloseValue), "Kapanış Saati", new { required = "true" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p><button type="submit" class="btn_1 medium">Kaydet</button></p>
+        </div>
+
+        <div class="box_general padding_bottom">
+            <div class="header_box version_2">
+                <h2><i class="fa fa-dashboard"></i>Diğer Bilgiler</h2>
+            </div>
+            <div class="row pb-3">
+                <div class="col-md-3">
+                    <label class="fix_spacing">Ödeme Yöntemleri</label>
+                </div>
+                <div class="col-md-9">
+                    <select class="js-example-basic-multiple form-control" name="paymentMethods[]" multiple="multiple">
+                        <option value="Nakit" @(Model.paymentMethods.Contains("Nakit") ? "selected" : "")>Nakit</option>
+                        <option value="Kredi Kartı" @(Model.paymentMethods.Contains("Kredi Kartı") ? "selected" : "")>Kredi Kartı</option>
+                        <option value="Çek" @(Model.paymentMethods.Contains("Çek") ? "selected" : "")>Çek</option>
+                        <option value="Para Transferi" @(Model.paymentMethods.Contains("Para Transferi") ? "selected" : "")>Para Transferi</option>
+                        <option value="Kapıda Ödeme" @(Model.paymentMethods.Contains("Kapıda Ödeme") ? "selected" : "")>Kapıda Ödeme</option>
+                        <option value="Taksitle Ödeme" @(Model.paymentMethods.Contains("Taksite Ödeme") ? "selected" : "")>Taksite Ödeme</option>
+                        <option value="Sanal Ödeme" @(Model.paymentMethods.Contains("Sanal Ödeme") ? "selected" : "")>Sanal Ödeme</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row pb-3">
+                <div class="col-md-3">
+                    <label class="fix_spacing">Belirgin Özelliğimiz 1</label>
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(w => w.user.SalientFeature1, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="row pb-3">
+                <div class="col-md-3">
+                    <label class="fix_spacing">Belirgin Özelliğimiz 2</label>
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(w => w.user.SalientFeature2, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="row pb-3">
+                <div class="col-md-3">
+                    <label class="fix_spacing">Belirgin Özelliğimiz 3</label>
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(w => w.user.SalientFeature3, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <p><button type="submit" class="btn_1 medium">Kaydet</button></p>
+        </div>
+    </div>
+}
+
+
+
+<script src="~/sparker/html/coming_soon/js/jquery-2.2.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+@*<script>
+        var description = CKEDITOR.replace('Description');
+        //CKFinder.setupCKEditor(description);
+    </script>*@
+<script>
+    function onlyNumberKey(evt) {
+
+        // Only ASCII charactar in that range allowed
+        var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+        if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+            return false;
+        return true;
+    }
+
+    $('.js-example-basic-multiple').select2();
+</script>
+<script>
+    $('#ProfilForm').on('submit', function (e) {
+        e.preventDefault();
+        var form = $('#ProfilForm')[0];
+        var data = new FormData(form);
+        //data.set('Description', CKEDITOR.instances['Description'].getData());
+        $.ajax({
+            url: '/Company/Dashboard/UserProfile',
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (result) {
+                if (result.isSuccess) {
+                    Swal.fire(
+                        'Firma Bilgileri',
+                        result.message,
+                        'success'
+                    )
+                    //setTimeout(function () {
+                    //    window.location.reload();
+                    //}, 2000);
+                }
+                else {
+                    Swal.fire(
+                        'Firma Bilgileri',
+                        result.message,
+                        'danger'
+                    )
+                }
+            }
+        })
+    });
+
+                            //function getLatLong() {
+                            //    var address = $("#Address").val();
+                            //    $.ajax({
+                            //        url: '/Company/Dashboard/GetLatLongFromAddress?address=' + address,
+                            //        type: 'POST',
+                            //        enctype: 'multipart/form-data',
+                            //        data: null,
+                            //        processData: false,
+                            //        contentType: false,
+                            //        cache: false,
+                            //        timeout: 600000,
+                            //        success: function (result) {
+                            //            if (result.isSuccess) {
+                            //                Swal.fire(
+                            //                    'Koordinat',
+                            //                    result.message,
+                            //                    'success'
+                            //                )
+                            //                $("#Latitude").val(result.data.latitude);
+                            //                $("#Longitude").val(result.data.longitude);
+                            //            }
+                            //            else {
+                            //                Swal.fire(
+                            //                    'Koordinat',
+                            //                    result.message,
+                            //                    'warning'
+                            //                )
+                            //            }
+                            //        }
+                            //    });
+                            //}
+</script>

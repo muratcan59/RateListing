@@ -1,0 +1,29 @@
+﻿@model RateListing.Model.OfferRequest
+
+@{
+    ViewBag.Title = "Teklif Detayı";
+    Layout = "~/Areas/Company/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Anasayfa</a>
+        </li>
+        <li class="breadcrumb-item active">Teklif Detayı</li>
+    </ol>
+    <div class="box_general">
+        <div class="header_box">
+            <h2 class="d-inline-block">Teklif Detayı</h2>
+        </div>
+        <div class="row pb-5">
+            <div class="col-2"><strong>Ad Soyad</strong></div><div class="col-10">@Model.NameSurname</div>
+            <div class="col-2"><strong>Email</strong></div><div class="col-10">@Model.Email</div>
+            <div class="col-2"><strong>Telefon</strong></div><div class="col-10">@Model.Phone</div>
+            <div class="col-2"><strong>Talep Tarihi</strong></div><div class="col-10">@Model.CreateDate</div>
+            <div class="col-2"><strong>Mesaj</strong></div><div class="col-10">@Model.Description</div>
+            <a class="btn btn-warning mt-5" href="/Company/Dashboard/RequestList">Listeye Dön</a>
+        </div>
+    </div>
+</div>

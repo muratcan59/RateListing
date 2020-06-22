@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "Ödeme - Adım 1";
+    Layout = "~/Areas/Company/Views/Shared/_UserLayout.cshtml";
+
+    var iller = RateListing.Bll.bCity.GetAll();
+}
+
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Anasayfa</a>
+        </li>
+        <li class="breadcrumb-item active">Ödeme</li>
+    </ol>
+    <form action="/Company/Payment/Step2" method="post">
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="box_general">
+                    <div class="header_box">
+                        <h2 class="d-inline-block">Kişisel Bilgiler</h2>
+                    </div>
+                    <div class="list_general reviews">
+                        <div class="row pb-5">
+                            <div class="col-12 mt-2">
+                                <input class="form-control" type="text" name="buyer.Name" value="" placeholder="Ad" required />
+                            </div>
+                            <div class="col-12 mt-2">
+                                <input class="form-control" type="text" name="buyer.Surname" value="" placeholder="Soyad" required />
+                            </div>
+                            <div class="col-12 mt-2">
+                                <input class="form-control" type="text" name="buyer.Email" value="" placeholder="Email" pattern="[a-z0-9._%+-]+@("@")[a-z0-9.-]+\.[a-z]{2,63}$" required />
+                            </div>
+                            <div class="col-12 mt-2">
+                                <input class="form-control" type="text" name="buyer.IdentityNumber" value="" placeholder="Kimlik No" pattern="[0-9]{11}" required />
+                            </div>
+                            <div class="col-12 mt-2">
+                                @Html.DropDownList("buyer.City", new SelectList(iller, "Name", "Name"), "Şehir", htmlAttributes: new { @class = "form-control", required = "true" })
+                            </div>
+                            <div class="col-12 mt-2">
+                                <textarea class="form-control" name="buyer.RegistrationAddress" placeholder="Adres" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box_general">
+                    <div class="header_box">
+                        <h2 class="d-inline-block">Fatura Bilgileri</h2>
+                    </div>
+                    <div class="list_general reviews">
+                        <div class="row pb-5">
+                            <div class="col-12 mt-2">
+                                <input class="form-control" type="text" name="billingAddress.ContactName" value="" placeholder="Adı" required />
+                            </div>
+                            <div class="col-12 mt-2">
+                                @Html.DropDownList("billingAddress.City", new SelectList(iller, "Name", "Name"), "Şehir", htmlAttributes: new { @class = "form-control",required="true" })
+                            </div>
+                            <div class="col-12 mt-2">
+                                <textarea class="form-control" name="billingAddress.Description" placeholder="Adres" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button style="cursor:pointer" class="btn btn-success btn-sm">Devam Et</button>
+            </div>
+        </div>
+    </form>
+</div>
+

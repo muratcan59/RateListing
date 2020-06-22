@@ -1,0 +1,330 @@
+﻿@using RateListing.Model
+@model User
+
+@{
+    ViewBag.Title = "Firma Güncelle";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var booleanSelectListItems = RateListing.Bll.Helpers.Tool.getBooleanSelectList();
+
+}
+
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+<script src="~/Scripts/ckeditor/config.js"></script>
+<script src="~/CKFinderScripts/ckfinder.js"></script>
+<link href="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+<script src="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>@Model.Name</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/Admin/Home/Index">Anasayfa</a></li>
+                        <li class="breadcrumb-item active">Firma Güncelle</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">İletişim Bilgileri</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2"><b>Adı</b></div>
+                            <div class="col-md-10">@Model.Name</div>
+
+                            <div class="col-md-2"><b>Yetkili</b></div>
+                            <div class="col-md-10">@Model.AuthorizedPerson</div>
+
+                            <div class="col-md-2"><b>Email</b></div>
+                            <div class="col-md-10">@Model.Email</div>
+
+                            <div class="col-md-2"><b>Telefon</b></div>
+                            <div class="col-md-10">@Model.PhoneNumber</div>
+
+                            <div class="col-md-2"><b>Alternatif Telefon</b></div>
+                            <div class="col-md-10">@Model.AlternativePhone</div>
+
+                            @if (Model.CityNum != null)
+                            {
+                                var city = RateListing.Bll.bCity.GetById(Model.CityNum.Value);
+
+                                <div class="col-md-2"><b>İl</b></div>
+                                <div class="col-md-10">@city.Name</div>
+                            }
+                            @if (Model.DistrictNum != null)
+                            {
+                                var district = RateListing.Bll.bDistrict.GetById(Model.DistrictNum.Value);
+
+                                <div class="col-md-2"><b>İlçe</b></div>
+                                <div class="col-md-10">@district.Name</div>
+                            }
+
+                            <div class="col-md-2"><b>Adres</b></div>
+                            <div class="col-md-10">@Model.Address</div>
+
+                            <div class="col-md-2"><b>Web Adres</b></div>
+                            <div class="col-md-10">@Model.WebUrl</div>
+
+                            <div class="col-md-2"><b>Facebook</b></div>
+                            <div class="col-md-10">@Model.FacebookUrl</div>
+
+                            <div class="col-md-2"><b>Twitter</b></div>
+                            <div class="col-md-10">@Model.TwitterUrl</div>
+
+                            <div class="col-md-2"><b>Instagram</b></div>
+                            <div class="col-md-10">@Model.InstagramUrl</div>
+                        </div>
+
+                    </div>
+                </div>
+
+                @using (Html.BeginForm("Update", "Company", FormMethod.Post, new { enctype = "multipart/form-data", id = "ProfilForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.Id)
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Kurumsal Bilgiler</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="form-horizontal row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-12">Vergi Dairesi</label>
+                                        <div class="col-md-12">
+                                            @Html.EditorFor(model => model.TaxPlace, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.TaxPlace, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-12">Vergi No</label>
+                                        <div class="col-md-12">
+                                            @Html.EditorFor(model => model.TaxNo, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.TaxNo, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-12">Kuruluş Yılı</label>
+                                        <div class="col-md-12">
+                                            @Html.EditorFor(model => model.FoundationYear, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.FoundationYear, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-12">Kredi Skoru</label>
+                                        <div class="col-md-12">
+                                            @Html.EditorFor(model => model.CreditScore, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.CreditScore, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-12">Kayıtlı Odalar</label>
+                                        <div class="col-md-12">
+                                            @Html.EditorFor(model => model.RegisteredRoom, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.RegisteredRoom, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-12">Kayıtlı Federasyonlar</label>
+                                        <div class="col-md-12">
+                                            @Html.EditorFor(model => model.RegisteredFederation, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.RegisteredFederation, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-12">Çalışan Kişi Sayısı</label>
+                                        <div class="col-md-12">
+                                            @Html.EditorFor(model => model.NumOfEmployees, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.NumOfEmployees, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-12">Sektör</label>
+                                        <div class="col-md-12">
+                                            @Html.DropDownListFor(model => model.CategoryId, new SelectList(ViewBag.Kategoriler as List<Category>, "Id", "Name"), "Seçiniz", htmlAttributes: new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-12">Lisans - Belge</label>
+                                        <div class="col-md-12">
+                                            @Html.EditorFor(model => model.LicenceDocument, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.LicenceDocument, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-12">Mal/Hizmet Tanımı</label>
+                                            <div class="col-md-12">
+                                                @Html.EditorFor(model => model.ServiceDefinition, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.ServiceDefinition, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-12">Lokasyon Adedi</label>
+                                        <div class="col-md-12">
+                                            @Html.EditorFor(model => model.LocationCount, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.LocationCount, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-12">Şirket Tipi</label>
+                                        <div class="col-md-12">
+                                            @Html.EnumDropDownListFor(model => model.CompanyType, "Şirket Tipini Seçin", new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.CompanyType, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Özel Ayarlar</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="form-horizontal row">
+                                @*<div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-12">Bonus Puan(+1 Puan) Aktif mi?</label>
+                                            <div class="col-md-12">
+                                                @Html.DropDownListFor(model => model.BonusFeature, new SelectList(booleanSelectListItems, "Value", "Text", Model.BonusFeature), new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.BonusFeature, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-12">Onaylandı mı?</label>
+                                        <div class="col-md-12">
+                                            @Html.DropDownListFor(model => model.isInformationConfirmed, new SelectList(booleanSelectListItems, "Value", "Text", Model.isInformationConfirmed), new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.isInformationConfirmed, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-12">Ödeme Yapıldı mı?</label>
+                                        <div class="col-md-12">
+                                            @Html.DropDownListFor(model => model.isPaymentConfirmed, new SelectList(booleanSelectListItems, "Value", "Text", Model.isInformationConfirmed), new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.isPaymentConfirmed, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-12">Sayfa Url (Boş bırakıldığında otomatik oluşturulur.)</label>
+                                        <div class="col-md-12">
+                                            @Html.EditorFor(model => model.Url, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Url, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6"></div>
+
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <a class="btn btn-warning" href="/Admin/Company/List">Listeye Dön</a>
+                            <button type="submit" class="btn btn-success">Kaydet</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    function onlyNumberKey(evt) {
+
+        // Only ASCII charactar in that range allowed
+        var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+        if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+            return false;
+        return true;
+    }
+</script>
+<script src="~/Areas/Admin/AdminLTE-master/plugins/jquery/jquery.min.js"></script>
+<script>
+    $('#ProfilForm').on('submit', function (e) {
+        e.preventDefault();
+        var form = $('#ProfilForm')[0];
+        var data = new FormData(form);
+        $.ajax({
+            url: '/Admin/Company/Update',
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (result) {
+                if (result.isSuccess) {
+                    Swal.fire(
+                        'Firma Bilgileri',
+                        result.message,
+                        'success'
+                    )
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                }
+                else {
+                    Swal.fire(
+                        'Profil Güncelleme',
+                        result.message,
+                        'danger'
+                    )
+                }
+            }
+        })
+    });
+</script>
+

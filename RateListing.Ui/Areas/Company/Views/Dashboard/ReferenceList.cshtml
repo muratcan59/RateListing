@@ -1,0 +1,55 @@
+﻿@model IEnumerable<RateListing.Model.Complaint>
+@{
+    ViewBag.Title = "Referans Listesi";
+    Layout = "~/Areas/Company/Views/Shared/_UserLayout.cshtml";
+}
+<link href="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+<script src="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<script src="~/Areas/Company/adminuser/vendor/jquery/jquery.min.js"></script>
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Anasayfa</a>
+        </li>
+        <li class="breadcrumb-item active">Referanslar</li>
+    </ol>
+    <div class="box_general">
+        <div class="header_box">
+            <h2 class="d-inline-block">Referans Listesi</h2>
+        </div>
+        <div class="list_general reviews">
+            <div class="table-responsive pb-5">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Ad Soyad</th>
+                            <th>Email</th>
+                            <th>Telefon</th>
+                            <th>Puan</th>
+                            <th>Onay Durumu</th>
+                            <th>Tarih</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderByDescending(w => w.CreateDate))
+                        {
+                            <tr>
+                                <td>@item.NameSurname</td>
+                                <td>@item.Email</td>
+                                <td>@item.Phone</td>
+                                <td>@item.Score</td>
+                                <td>@(item.IsApprove ? Html.Raw("<a class='text-success'>Onaylandı</a>") : Html.Raw("<a class='text-danger'>Onaylanmadı</a>"))</td>
+                                <td>@item.CreateDate</td>
+                                <td>
+                                    <a href="/Company/Dashboard/ReferenceDetail?referenceId=@item.Id" class="btn btn-info btn-sm">Görüntüle</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

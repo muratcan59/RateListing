@@ -1,0 +1,41 @@
+/* YOUR CUSTOM CSS */
+
+.table td, .table th {
+    padding: 5px !important;
+}
+
+.btn {
+    border-radius: 0px !important;
+}
+
+.btn_1 {
+    border-radius: 0px !important;
+}
+
+.form-control {
+    padding: 5px;
+    border-radius:0px;
+}
+
+select.form-control:not([size]):not([multiple]) {
+    height: 35px;
+}
+
+.card {
+    border-radius: 0px;
+}
+
+.breadcrumb {
+    border-radius: 0px;
+}
+
+.box_general{
+    border-radius:0px;
+}
+.alert{
+    border-radius:0px;
+}
+
+.styled-select{
+    border-radius:0px;
+}

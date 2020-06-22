@@ -1,0 +1,221 @@
+﻿@using RateListing.Model
+@model User
+
+@{
+    ViewBag.Title = "Kurumsal Bilgiler";
+    Layout = "~/Areas/Company/Views/Shared/_UserLayout.cshtml";
+    var kategoriler = RateListing.Bll.bCategory.GetAll();
+    var kategoriler2 = new List<Category>();
+    var kategoriler3 = new List<Category>();
+
+    if (Model.CategoryId != null)
+    {
+        kategoriler2 = RateListing.Bll.bCategory.GetSubCategories(Model.CategoryId.Value);
+    }
+    if (Model.Category2Id != null)
+    {
+        kategoriler3 = RateListing.Bll.bCategory.GetSubCategories(Model.Category2Id.Value);
+    }
+}
+
+<link href="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+
+<div class="container-fluid">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Anasayfa</a>
+        </li>
+        <li class="breadcrumb-item active">Profilim</li>
+    </ol>
+    <div class="box_general padding_bottom">
+        <div class="header_box version_2">
+            <h2><i class="fa fa-user"></i>Kurumsal Bilgiler</h2>
+        </div>
+        <div class="alert alert-danger" role="alert">
+            <i class="fa fa-warning"></i><b> Dikkat!</b> Eğer bilgileriniz daha önce onaylanmış ise bu bölümde yapacağınız değişiklikler onayı kaldıracak ve hesabınızın yeniden <b>RateListing</b> tarafından onaylanması gerekecektir. Onaylanmamış hesaplar yayından kaldırılır.
+        </div>
+        @using (Html.BeginForm("CompanyProfile", "Dashboard", FormMethod.Post, new { enctype = "multipart/form-data", id = "CompanyForm" }))
+        {
+            <div class="row">
+                <div class="col-md-12 add_top_30">
+                    <div class="row">
+
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(x => x.Id)
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Vergi Dairesi</label>
+                                @Html.EditorFor(model => model.TaxPlace, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Vergi No</label>
+                                @Html.EditorFor(x => x.TaxNo, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Kuruluş Yılı</label>
+                                @Html.EditorFor(x => x.FoundationYear, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Kredi Skoru</label>
+                                @Html.EditorFor(x => x.CreditScore, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Kayıtlı Odalar</label>
+                                @Html.EditorFor(model => model.RegisteredRoom, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Kayıtlı Federasyonlar</label>
+                                @Html.EditorFor(x => x.RegisteredFederation, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Çalışan Kişi Sayısı</label>
+                                @Html.EditorFor(x => x.NumOfEmployees, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Lisans - Belge</label>
+                                @Html.EditorFor(x => x.LicenceDocument, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        @*<div class="col-md-12">
+                            <div class="form-group">
+                                <label>Mal/Hizmet Tanımı</label>
+                                @Html.EditorFor(x => x.ServiceDefinition, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>*@
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Lokasyon Adedi</label>
+                                @Html.EditorFor(x => x.LocationCount, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Şirket Tipi</label>
+                                @Html.EnumDropDownListFor(x => x.CompanyType, "Şirket Tipini Seçin", new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Sektör</label>
+                                @Html.DropDownListFor(model => model.CategoryId, new SelectList(kategoriler as List<Category>, "Id", "Name"), "Seçiniz", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Alt Kategori</label>
+                                @Html.DropDownListFor(model => model.Category2Id, new SelectList(kategoriler2 as List<Category>, "Id", "Name"), "Seçiniz", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Alt Kategori 2</label>
+                                @Html.DropDownListFor(model => model.Category3Id, new SelectList(kategoriler3 as List<Category>, "Id", "Name"), "Seçiniz", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="submit" class="btn_1 medium">Kaydet</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="~/sparker/html/coming_soon/js/jquery-2.2.4.min.js"></script>
+<script src="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<script>
+    $("#CategoryId").change(function () {
+        var id = $("#CategoryId").val();
+        $("#Category2Id").html("");
+        $("#Category2Id").html("<option value>Seçiniz</option>");
+        $.get("/Company/Dashboard/SubCategories?id=" + id, function (result) {
+            $.each(result, function (key, value) {
+                $("#Category2Id").append("<option value='" + value.Id + "'>" + value.Name + "</option>");
+            });
+        });
+        $("#Category3Id").html("");
+        $("#Category3Id").html("<option value>Seçiniz</option>");
+    });
+
+    $("#Category2Id").change(function () {
+        var id = $("#Category2Id").val();
+        $("#Category3Id").html("");
+        $("#Category3Id").html("<option value>Seçiniz</option>");
+        $.get("/Company/Dashboard/SubCategories?id=" + id, function (result) {
+            $.each(result, function (key, value) {
+                $("#Category3Id").append("<option value='" + value.Id + "'>" + value.Name + "</option>");
+            });
+        });
+    });
+</script>
+<script>
+    $('#CompanyForm').on('submit', function (e) {
+        e.preventDefault();
+        var form = $('#CompanyForm')[0];
+        var data = new FormData(form);
+
+        Swal.fire({
+            title: 'İşlemi onaylıyor musunuz?',
+            text: "Devam etmeniz durumunda hesabınız yeniden onay sürecine girecektir!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Evet',
+            cancelButtonText: 'Hayır'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: '/Company/Dashboard/CompanyProfile',
+                    type: 'POST',
+                    enctype: 'multipart/form-data',
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 600000,
+                    success: function (result) {
+                        if (result.isSuccess) {
+                            Swal.fire(
+                                'Kurumsal Bilgiler',
+                                result.message,
+                                'success'
+                            )
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 2000);
+                        }
+                        else {
+                            Swal.fire(
+                                'Kurumsal Bilgiler',
+                                result.message,
+                                'danger'
+                            )
+                        }
+                    }
+                })
+            }
+        })
+    });
+</script>

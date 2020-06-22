@@ -1,0 +1,126 @@
+﻿@model RateListing.Model.User
+
+@{
+    ViewBag.Title = "Süreç Takibi";
+    Layout = "~/Areas/Company/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Anasayfa</a>
+        </li>
+    </ol>
+
+    <div class="box_general padding_bottom">
+        <div class="header_box version_2">
+            <h2><i class="fa fa-bar-chart"></i>Süreç Takibi</h2>
+        </div>
+
+
+        <div class="row">
+            @if (!Model.isInformationConfirmed)
+            {
+                <div class="col-md-12">
+                    <h2 class="text-center text-danger">Onay Bekliyor</h2>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: 33%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mt-5">
+                    <h5>Adımlar</h5>
+                    <ul>
+                        <li class="text-success">Hızlı akredirasyon.</li>
+                        <li class="text-danger">İletişim ve kurumsal bilgilerin RateListing tarafından onaylanması.</li>
+                        <li class="text-danger">Onaylanmış bilgilere göre ödeme işleminin yapılması.</li>
+                    </ul>
+                </div>
+
+                <div class="col-md-12 mt-1 text-center">
+                    <a class="btn btn-success" href="/Company/Dashboard/CompanyProfile">Bilgileri Güncelle</a>
+                </div>
+
+            }
+            else if (!Model.isPaymentConfirmed)
+            {
+                var packageInfo = RateListing.Bll.bUser.GetPacgageInfo(Model.Id);
+
+                <div class="col-md-12">
+                    <h2 class="text-center text-warning">Ödeme Bekliyor</h2>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 66%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mt-5">
+                    <h5>Adımlar</h5>
+                    <ul>
+                        <li class="text-success">Hızlı akredirasyon.</li>
+                        <li class="text-success">İletişim ve kurumsal bilgilerin RateListing tarafından onaylanması.</li>
+                        <li class="text-danger">Onaylanmış bilgilere göre ödeme işleminin yapılması. (Ödeme bilgileri aşağıdadır.)</li>
+                    </ul>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-12">
+                    <h2 class="text-center text-success">Yayında</h2>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mt-5">
+                    <h5>Adımlar</h5>
+                    <ul>
+                        <li class="text-success">Hızlı akredirasyon.</li>
+                        <li class="text-success">İletişim ve kurumsal bilgilerin RateListing tarafından onaylanması.</li>
+                        <li class="text-success">Onaylanmış bilgilere göre ödeme işleminin yapılması.</li>
+                    </ul>
+                </div>
+            }
+        </div>
+
+    </div>
+
+    @if (!Model.isPaymentConfirmed && Model.isInformationConfirmed)
+    {
+        var packageInfo = RateListing.Bll.bUser.GetPacgageInfo(Model.Id);
+
+        <div class="box_general padding_bottom">
+            <div class="header_box version_2">
+                <h2><i class="fa fa-money"></i>Paket ve Ödeme Bilgileri</h2>
+                <hr />
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>
+                            Paket: @packageInfo.package.Name<br />
+                            Tutar: @packageInfo.package.Price₺<br />
+                        </p>
+
+                        @if (packageInfo.discountTexts.Any())
+                        {
+                            <p>
+                                *İndirimler* <br />
+                                @foreach (var item in packageInfo.discountTexts)
+                                {
+                                    @item <br />
+                                }
+                            </p>
+                            <p>
+                                Toplam İndirim: %@(packageInfo.totalDiscountPercent) <br />
+                                Toplam İndirim Tutarı: @packageInfo.totalDiscountPrice₺ <br />
+                                Genel Toplam: <b>@packageInfo.GrandTotal₺</b>
+                            </p>
+                        }
+                        <a class="btn btn-success" href="/Company/Payment/Step1">Ödeme Yap</a><br /><br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+</div>
+<!-- /.container-fluid-->

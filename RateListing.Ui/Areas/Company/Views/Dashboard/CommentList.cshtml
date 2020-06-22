@@ -1,0 +1,193 @@
+﻿@model IEnumerable<RateListing.Model.Comment>
+@{
+    ViewBag.Title = "Yorum Listesi";
+    Layout = "~/Areas/Company/Views/Shared/_UserLayout.cshtml";
+    var kullanici = RateListing.Bll.bUser.GetByName(User.Identity.Name);
+}
+<link href="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+<script src="~/Areas/Admin/AdminLTE-master/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<script src="~/Areas/Company/adminuser/vendor/jquery/jquery.min.js"></script>
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Anasayfa</a>
+        </li>
+        <li class="breadcrumb-item active">Yorumlar</li>
+    </ol>
+    <div class="box_general">
+        <div class="header_box">
+            <h2 class="d-inline-block">Yorum Listesi</h2>
+            <div class="filter">
+                <select name="orderby" class="selectbox">
+                    <option value="Any time">Gelişmiş Sıralama</option>
+                    <option value="Latest">Tarihe Göre(En Yeni)</option>
+                    <option value="Oldest">Tarihe Göre(En Eski)</option>
+                </select>
+            </div>
+        </div>
+        <div class="list_general reviews">
+            <ul>
+                @foreach (var item in Model)
+                {
+                    <li style="margin-left:-118px;">
+                        <input type="hidden" name="Id" value="@item.Id" />
+                        <input type="hidden" name="UserId" value="@item.UserId" />
+                        <span>@item.CreateDate.Value</span>
+                        <span class="rating">
+                            @switch (item.Score)
+                            {
+                                case 1:
+                                    <i class="fa fa-fw fa-star yellow"></i><i class="fa fa-fw fa-star"></i><i class="fa fa-fw fa-star"></i><i class="fa fa-fw fa-star"></i><i class="fa fa-fw fa-star"></i>
+                                    break;
+                                case 2:
+                                    <i class="fa fa-fw fa-star yellow"></i><i class="fa fa-fw fa-star yellow"></i><i class="fa fa-fw fa-star"></i><i class="fa fa-fw fa-star"></i><i class="fa fa-fw fa-star"></i>
+                                    break;
+                                case 3:
+                                    <i class="fa fa-fw fa-star yellow"></i><i class="fa fa-fw fa-star yellow"></i><i class="fa fa-fw fa-star yellow"></i><i class="fa fa-fw fa-star"></i><i class="fa fa-fw fa-star"></i>
+                                    break;
+                                case 4:
+                                    <i class="fa fa-fw fa-star yellow"></i><i class="fa fa-fw fa-star yellow"></i><i class="fa fa-fw fa-star yellow"></i><i class="fa fa-fw fa-star yellow"></i><i class="fa fa-fw fa-star"></i>
+                                    break;
+                                case 5:
+                                    <i class="fa fa-fw fa-star yellow"></i><i class="fa fa-fw fa-star yellow"></i><i class="fa fa-fw fa-star yellow"></i><i class="fa fa-fw fa-star yellow"></i><i class="fa fa-fw fa-star yellow"></i>
+                                    break;
+                                default:
+                                    <i class="fa fa-fw fa-star"></i><i class="fa fa-fw fa-star"></i><i class="fa fa-fw fa-star"></i><i class="fa fa-fw fa-star"></i><i class="fa fa-fw fa-star"></i>
+                                    break;
+
+                            }
+                        </span>
+                        <h4>@item.Email <small>by @item.NameSurname</small></h4>
+
+                        <p>@item.Description</p>
+                        <p class="inline-popups">
+                            @if (item.IsApprove)
+                            {
+                                <a href="#" data-id="@item.Id" data-effect="mfp-zoom-in" class="btn_1 gray btnOnayKaldir">Onay Kaldır</a>
+                            }
+                            else
+                            {
+                                <a href="#" data-id="@item.Id" data-effect="mfp-zoom-in" class="btn_1 gray btnOnay">Onayla</a>
+                            }
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="#modal-reply" data-id="@item.Id" data-effect="mfp-zoom-in" class="btn_1 gray"><i class="fa fa-fw fa-reply"></i> Yoruma Cevap Ver</a>
+
+                        </p>
+                    </li>
+
+                }
+            </ul>
+        </div>
+    </div>
+    <!-- /box_general-->
+    <nav aria-label="...">
+        <ul class="pagination pagination-sm add_bottom_30">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
+    <!-- /pagination-->
+</div>
+<!-- /container-fluid-->
+<div id="modal-reply" class="white-popup mfp-with-anim mfp-hide">
+    <div class="small-dialog-header">
+        <h3>Yoruma Cevap Ver</h3>
+    </div>
+    <div class="message-reply margin-top-0">
+        <form action="/Company/Dashboard/AnswerComment" method="post">
+            <input type="hidden" name="Id" value="" />
+            <input type="hidden" name="UserId" value="@kullanici.Id" />
+            <div class="form-group">
+                <textarea cols="40" name="Answer" rows="3" class="form-control"></textarea>
+            </div>
+            <button type="submit" class="btn_1">Yanıtla</button>
+        </form>
+    </div>
+</div>
+<script>
+    $(".btnOnay").click(function () {
+        var id = $(this).data('id');
+        Swal.fire({
+            title: 'Onaylamak istediğinizden emin misiniz?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Evet',
+            cancelButtonText: 'Hayır'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: '/Company/Dashboard/ApproveComment/' + id,
+                    type: 'GET',
+                    enctype: 'multipart/form-data',
+                    data: { id: id },
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 600000,
+                    success: function (result) {
+                        if (result) {
+                            Swal.fire(
+                                'Onaylama',
+                                'Seçtiğiniz yorum onaylandı.',
+                                'success'
+                            )
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        }
+                    }
+                });
+
+            }
+        })
+    });
+</script>
+<script>
+    $(".btnOnayKaldir").click(function () {
+        var id = $(this).data('id');
+        Swal.fire({
+            title: 'Onayı kaldırmak istediğinizden emin misiniz?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Evet',
+            cancelButtonText: 'Hayır'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: '/Company/Dashboard/RemoveAppComment/' + id,
+                    type: 'GET',
+                    enctype: 'multipart/form-data',
+                    data: { id: id },
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 600000,
+                    success: function (result) {
+                        if (result) {
+                            Swal.fire(
+                                'Onay Kaldırma',
+                                'Seçtiğiniz yorum onayı kaldırıldı.',
+                                'success'
+                            )
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        }
+                    }
+                });
+
+            }
+        })
+    });
+</script>

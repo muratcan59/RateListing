@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Ödeme - Adım 2";
+    Layout = "~/Areas/Company/Views/Shared/_UserLayout.cshtml";
+
+    var iller = RateListing.Bll.bCity.GetAll();
+}
+
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Anasayfa</a>
+        </li>
+        <li class="breadcrumb-item active">Ödeme</li>
+    </ol>
+    <div class="box_general">
+        <div class="list_general reviews">
+            <div id="iyzipay-checkout-form" class="responsive"></div>
+            @Html.Raw(ViewBag.IyzipayScript)
+        </div>
+    </div>
+</div>
+
